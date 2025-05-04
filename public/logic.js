@@ -14,8 +14,8 @@ const horizDist = (3 / 4) * hexWidth;
 
 const grid = [];
 
-const hardTerrianColor = "#e0e0e0"
-const easyTerrianColor = "#ffffff"
+const hardTerrianColor = "#e0e0e0";
+const easyTerrianColor = "#ffffff";
 
 function drawHex(x, y, radius, color) {
     ctx.beginPath();
@@ -41,14 +41,13 @@ function buildGrid() {
         for (let row = 0; row < rows; row++) {
             const x = col * horizDist;
             const y = row * vertDist + (col % 2) * (vertDist / 2);
-            
-            let isDifficultTerrian = Math.random() < 0.05 ? true : false;
+
+            let isDifficultTerrian = Math.random() < 0.05;
 
             grid[col][row] = { x, y, isDifficultTerrian };
         }
     }
 
-    // Second pass: Increase tan probability based on adjacent tiles
     for (let col = 0; col < grid.length; col++) {
         for (let row = 0; row < grid[col].length; row++) {
             if (grid[col][row].isDifficultTerrian) {
@@ -64,17 +63,14 @@ function buildGrid() {
 }
 
 function drawGrid() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  for (let col = 0; col < grid.length; col++) {
-      for (let row = 0; row < grid[col].length; row++) {
-          const { x, y, isDifficultTerrian } = grid[col][row];
-          
-          // Use terrain colors only, removing edge detection entirely
-          let color = isDifficultTerrian ? hardTerrianColor : easyTerrianColor;
-
-          drawHex(x, y, hexRadius, color);
-      }
-  }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let col = 0; col < grid.length; col++) {
+        for (let row = 0; row < grid[col].length; row++) {
+            const { x, y, isDifficultTerrian } = grid[col][row];
+            let color = isDifficultTerrian ? hardTerrianColor : easyTerrianColor;
+            drawHex(x, y, hexRadius, color);
+        }
+    }
 }
 
 function getNeighbors(col, row) {
@@ -96,23 +92,31 @@ function randomNeighbor(col, row) {
 function drawShapes() {
     drawGrid();
 
-    const { x: x1, y: y1 } = grid[orc1.col][orc1.row];
-    ctx.beginPath();
-    ctx.arc(x1, y1, hexRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "blue";
-    ctx.fill();
+    orcs.forEach((orc, index) => {
+        const { x, y } = grid[orc.col][orc.row];
+        ctx.beginPath();
+        ctx.arc(x, y, hexRadius, 0, Math.PI * 2);
+        ctx.fillStyle = "blue";
+        ctx.fill();
+        if (blueInput && index === 0) {
+            blueInput.value = `(${orc.col}, ${orc.row})`;
+        }
+    });
 
     const { x: x2, y: y2 } = grid[shape2.col][shape2.row];
     ctx.fillStyle = "orange";
     const size = hexRadius * 1.5;
     ctx.fillRect(x2 - size / 2, y2 - size / 2, size, size);
 
-    blueInput.value = `(${orc1.col}, ${orc1.row})`;
-    orangeInput.value = `(${shape2.col}, ${shape2.row})`;
+    if (orangeInput) {
+        orangeInput.value = `(${shape2.col}, ${shape2.row})`;
+    }
 }
 
 function blueMove() {
-    [orc1.col, orc1.row] = randomNeighbor(orc1.col, orc1.row);
+    orcs.forEach(orc => {
+        [orc.col, orc.row] = randomNeighbor(orc.col, orc.row);
+    });
     drawShapes();
 }
 
@@ -123,11 +127,14 @@ function orangeMove() {
 
 buildGrid();
 
-// Ensure initial placement **within the canvas and away from borders**
-
-const orc1 = new Orc(200);
-orc1.col = Math.floor(Math.random() * (grid.length - 4)) + 2
-orc1.row = Math.floor(Math.random() * (grid[0].length - 4)) + 2
+// Create three orcs
+const orcs = [];
+for (let i = 0; i < 3; i++) {
+    const orc = new Orc(200);
+    orc.col = Math.floor(Math.random() * (grid.length - 4)) + 2;
+    orc.row = Math.floor(Math.random() * (grid[0].length - 4)) + 2;
+    orcs.push(orc);
+}
 
 const shape2 = {
     col: Math.floor(Math.random() * (grid.length - 4)) + 2,
