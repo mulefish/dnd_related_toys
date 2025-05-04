@@ -1,3 +1,5 @@
+// node --test .\unit-tests.js
+
 const assert = require('assert');
 const { test } = require('node:test');
 const { Elf, Orc, generateElfName, generateOrcName, _attributes } = require('./Combatants.js');
