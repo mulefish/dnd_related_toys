@@ -41,70 +41,63 @@ const elfSyllables = [
     const name = generateName(elfSyllables, syllableCount);
     return name;
   }
+
   
   
-class Elf {
-  constructor(total_points) {
-    this.name = generateElfName();
-    // this.selfPreservation and this.goalDriven will be in conflict
-    this.selfPreservation = 0;
-    this.goalDriven = 50;
-    this.attack = 0; // Damage done per attack: A random number up to this value
-    this.hitpoints = 0; // HP
-    this.movement = 0; // Pixels movement across the board
-    this.sight = 0; // Ablity to see across the board, in Pixels
-    this.initiative = 0;
-    this.range = 0;
-    // Keep track of 'score' for genetic algo across generations
-    // Will figure the cross generation stuff later - right now this is here as a note to myself
-    this.range = 0; 
-    this.breedableScore = 0;
-    this.col = 0;
-    this.row = 0;
-    assignPoints(this, total_points);
+  class Creature {
+    constructor(total_points) {
+        this.name = ""
+      // this.name = generateElfName();
+      // this.selfPreservation and this.goalDriven will be in conflict
+      this.selfPreservation = 0;
+      this.goalDriven = 50;
+      this.attack = 0; // Damage done per attack: A random number up to this value
+      this.hitpoints = 0; // HP
+      this.movement = 0; // Pixels movement across the board
+      this.sight = 0; // Ablity to see across the board, in Pixels
+      this.initiative = 0;
+      this.range = 0;
+      // Keep track of 'score' for genetic algo across generations
+      // Will figure the cross generation stuff later - right now this is here as a note to myself
+      this.range = 0; 
+      this.breedableScore = 0;
+      this.col = 0;
+      this.row = 0;
+      assignPoints(this, total_points);
+
+      this.specialFeatures()
+    }
+    specialFeatures() {
+        // This is here to be @Override
+    }
+  
+    displayStats() {
+      console.log("Orc Stats:", this);
+    }
+  }
+  
+  class Elf extends Creature {
+    specialFeatures() { 
+        this.name = generateElfName();
+        this.range = this.movement + Math.floor(this.movement * 0.25);
+    }
+
   }
 
-  displayStats() {
-    console.log("Orc Stats:", this);
-  }
-}
-
-class Orc {
-  constructor(total_points) {
-    this.name = generateOrcName();
-    // this.selfPreservation and this.goalDriven will be in conflict
-    this.selfPreservation = 0;
-    this.goalDriven = 50;
-    this.attack = 0; // Damage done per attack: A random number up to this value
-    this.hitpoints = 0; // HP
-    this.movement = 0; // Pixels movement across the board
-    this.sight = 0; // Ablity to see across the board, in Pixels
-    this.initiative = 0;
-    // Keep track of 'score' for genetic algo across generations
-    // Will figure the cross generation stuff later - right now this is here as a note to myself
-    this.breedableScore = 0;
-    this.col = 0;
-    this.row = 0;
-    assignPoints(this, total_points);
-    this.range = this.movement + Math.floor(this.movement * 0.25);
+  class Orc extends Creature {
+    specialFeatures() { 
+        this.name = generateOrcName();
+    }
   }
 
-  displayStats() {
-    console.log("Orc Stats:", this);
-  }
-}
 function generateName(syllables, syllableCount) {
+    // In hindsight I think I've put too much effort into the names. Lol. 
   let nameParts = [];
-
   for (let i = 0; i < syllableCount; i++) {
     let syllable = syllables[Math.floor(Math.random() * syllables.length)];
-
     nameParts.push(syllable);
   }
-
   let name = nameParts.join("");
-
-  // Ensure name uniqueness
   if (seenNames.has(name)) {
     seenNames.set(name, seenNames.get(name) + 1);
     name += seenNames.get(name);
