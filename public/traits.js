@@ -8,6 +8,7 @@ class Orc {
         this.hitpoints = 0; // HP
         this.movement = 0; // Pixels movement across the board
         this.sight = 0; // Ablity to see across the board, in Pixels
+        this.initialtive = 0;
         // Keep track of 'score' for genetic algo across generations
         // Will figure the cross generation stuff later - right now this is here as a note to myself
         this.breedableScore = 0; 
@@ -46,7 +47,7 @@ function generateOrcName() {
 }
 
 function assignPoints(orc, total_points) {
-    const attributes = ["selfPreservation", "attack", "hitpoints", "movement"];
+    const attributes = ["selfPreservation", "attack", "hitpoints", "movement", "initialtive"];
     let remainingPoints = total_points;
 
     // First pass: Assign each attribute between 10 and 30 points
