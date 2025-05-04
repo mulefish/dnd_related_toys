@@ -1,8 +1,18 @@
 // node --test .\unit-tests.js
 
-const assert = require('assert');
-const { test } = require('node:test');
-const { Elf, Orc, generateElfName, generateOrcName, _attributes } = require('./Combatants.js');
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import { Elf, Orc, generateElfName, generateOrcName } from './Combatants.js';
+import { buildGrid, getNeighbors, grid, Hexagon } from './logic.js';
+
+////////////////// - Combatants.js - ///////////////////////////////////////
+const _attributes = [
+  "selfPreservation",
+  "attack",
+  "hitpoints",
+  "movement",
+  "initiative"
+];
 
 test('Elf and Orc names should not be empty', () => {
   const elfName = generateElfName();
@@ -29,5 +39,32 @@ test('Orcs have valid attribute ranges', () => {
       assert.ok(orc[attr] >= 10 && orc[attr] <= 100, `Orc ${attr} invalid: ${orc[attr]}`);
     }
     assert.ok(orc.sight >= 10 && orc.sight <= 150, `Orc sight invalid: ${orc.sight}`);
+  }
+});
+
+////////////////// - logic.js - ///////////////////////////////////////
+test('Grid is built with Hexagon instances', () => {
+  // Create a mock canvas for logic.js to use
+  const dummyCanvas = {
+    width: 800,
+    height: 600,
+    style: {},
+    getContext: () => ({ setTransform: () => {} })
+  };
+  global.window = { devicePixelRatio: 1, innerWidth: 800 }; // Needed for buildGrid
+  buildGrid(dummyCanvas);
+
+  assert.ok(grid.length > 0, 'Grid should have columns');
+  assert.ok(grid[0].length > 0, 'Grid should have rows');
+  assert.ok(grid[0][0] instanceof Hexagon, 'Each cell should be a Hexagon instance');
+});
+
+test('getNeighbors returns valid neighbors', () => {
+  const col = 2, row = 2;
+  const neighbors = getNeighbors(col, row);
+
+  assert.ok(neighbors.length > 0, 'Should return some neighbors');
+  for (const [c, r] of neighbors) {
+    assert.ok(grid[c] && grid[c][r], `Neighbor at (${c},${r}) should exist in grid`);
   }
 });

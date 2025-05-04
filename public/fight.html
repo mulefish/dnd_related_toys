@@ -1,64 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>FIGHT!</title>
-    <script src="Combatants.js"></script>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="layout">
-      <div class="panel blue">
-        <div class="info">
-          <label for="bluePos">Blue:</label>
-          <input id="bluePos" type="text" readonly />
-        </div>
-        <input id="blueAttack" value="2d6" />
-        <input id="blueMove" value="2" />
-        <input id="blueRange" value="0" />
+<head>
+  <meta charset="UTF-8" />
+  <title>FIGHT!</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="layout">
+    <div class="panel blue">
+      <div class="info">
+        <label for="bluePos">Blue:</label>
+        <input id="bluePos" type="text" readonly />
       </div>
-
-      <div class="panel orange">
-        <div class="info">
-          <label for="orangePos">Orange:</label>
-          <input id="orangePos" type="text" readonly />
-        </div>
-        <input id="orangeAttack" value="1d6" />
-        <input id="orangeMove" value="1" />
-        <input id="orangeRange" value="1" />
-      </div>
-      <div >
-        <div id="small-gray">Debug? <span id="isDebug">X</span></div>
-        <label id="debugSwitch">
-          <input type="checkbox" id="myToggle" onchange="toggleDebug()">
-          <span id="slider"></span>
-        </label>
-        
-        <script>
-          let debug = false;
-          function toggleDebug() {
-            if ( debug === false ) {
-              debug = true               
-              document.getElementById("isDebug").innerHTML = "O"
-            } else {
-              debug = false
-              document.getElementById("isDebug").innerHTML = "X"
-            }
-            drawShapes();
-          }
-        </script></scrpt>
-      </div>
+      <input id="blueAttack" value="2d6" />
+      <input id="blueMove" value="2" />
+      <input id="blueRange" value="0" />
     </div>
-    HELLO 
-    <hr />
-    <div class="panel">
-      <canvas id="hexCanvas" ></canvas>
-      <button onclick="orcMoves()">orcMoves</button>
-      <button onclick="elfMoves()">elfMoves</button>
-    </div>
-    <script>
 
-    </script>
-    <script src="logic.js"></script>
-  </body>
+    <div class="panel orange">
+      <div class="info">
+        <label for="orangePos">Orange:</label>
+        <input id="orangePos" type="text" readonly />
+      </div>
+      <input id="orangeAttack" value="1d6" />
+      <input id="orangeMove" value="1" />
+      <input id="orangeRange" value="1" />
+    </div>
+
+    <div>
+      <div id="small-gray">Debug? <span id="isDebug">X</span></div>
+      <label id="debugSwitch">
+        <input type="checkbox" id="myToggle" onchange="toggleDebug()">
+        <span id="slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <hr />
+  <div class="panel">
+    <canvas id="hexCanvas"></canvas>
+    <button onclick="orcMoves()">orcMoves</button>
+    <button onclick="elfMoves()">elfMoves</button>
+  </div>
+
+  <script>
+    let debug = false;
+    function toggleDebug() {
+      debug = !debug;
+      document.getElementById("isDebug").textContent = debug ? "O" : "X";
+      drawShapes(); // assumes drawShapes is globally available
+    }
+  </script>
+
+  <!-- Load logic first, then display -->
+  <script type="module" src="logic.js"></script>
+  <script type="module" src="display.js"></script>
+</body>
 </html>
