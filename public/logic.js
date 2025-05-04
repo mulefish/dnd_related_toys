@@ -64,13 +64,17 @@ function buildGrid() {
 }
 
 function drawGrid() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let col = 0; col < grid.length; col++) {
-        for (let row = 0; row < grid[col].length; row++) {
-            const { x, y, isDifficultTerrian } = grid[col][row];
-            drawHex(x, y, hexRadius, isDifficultTerrian ? hardTerrianColor : easyTerrianColor);
-        }
-    }
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let col = 0; col < grid.length; col++) {
+      for (let row = 0; row < grid[col].length; row++) {
+          const { x, y, isDifficultTerrian } = grid[col][row];
+          
+          // Use terrain colors only, removing edge detection entirely
+          let color = isDifficultTerrian ? hardTerrianColor : easyTerrianColor;
+
+          drawHex(x, y, hexRadius, color);
+      }
+  }
 }
 
 function getNeighbors(col, row) {
