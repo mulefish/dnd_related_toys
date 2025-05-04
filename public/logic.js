@@ -22,7 +22,6 @@ const vertDist = hexHeight;
 const horizDist = (3 / 4) * hexWidth;
 
 const grid = [];
-let debug = false;
 
 const hardTerrianColor = "#e0e0e0";
 const easyTerrianColor = "#ffffff";

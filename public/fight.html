@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>FIGHT!</title>
-    <script src="traits.js"></script>
+    <script src="Combatants.js"></script>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -27,7 +27,29 @@
         <input id="orangeMove" value="1" />
         <input id="orangeRange" value="1" />
       </div>
+      <div >
+        <div id="small-gray">Debug? <span id="isDebug">X</span></div>
+        <label id="debugSwitch">
+          <input type="checkbox" id="myToggle" onchange="toggleDebug()">
+          <span id="slider"></span>
+        </label>
+        
+        <script>
+          let debug = false;
+          function toggleDebug() {
+            if ( debug === false ) {
+              debug = true               
+              document.getElementById("isDebug").innerHTML = "O"
+            } else {
+              debug = false
+              document.getElementById("isDebug").innerHTML = "X"
+            }
+            drawShapes();
+          }
+        </script></scrpt>
+      </div>
     </div>
+    HELLO 
     <hr />
     <div class="panel">
       <canvas id="hexCanvas" ></canvas>
