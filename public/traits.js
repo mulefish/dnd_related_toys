@@ -48,8 +48,9 @@ function generateOrcName() {
 // NOTE: '_attributes' is globally available only for the TDD elf-test - otherwise it would be inide the assignPoints func: JS doesn't have the concepyt of 'protected'
 const _attributes = ["selfPreservation", "attack", "hitpoints", "movement", "initiative"];
 function assignPoints(orc, total_points) {
-    // This is a '2 pass state machine'. First will distributes baseline valuesto each member of the class
-    // And the second pass will pass the 'spice' to each member of the class. 
+    // This is a '2 pass state machine'. 
+    // First pass will distributes baseline valuesto each member of the class
+    // Second pass will pass the 'spice' to each member of the class. 
     // Each member in the '_attributes' array to get AT LEAST 10 and NO MORE than 100. 
     // Except 'sight' which will be more than 'movement' and might well be up to 150. 
     const _attributes = ["selfPreservation", "attack", "hitpoints", "movement", "initiative"];

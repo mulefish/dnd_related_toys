@@ -113,7 +113,7 @@ function drawShapes() {
     }
 }
 
-function blueMove() {
+function orcMoves() {
     orcs.forEach(orc => {
         [orc.col, orc.row] = randomNeighbor(orc.col, orc.row);
     });
