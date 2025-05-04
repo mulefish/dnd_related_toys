@@ -6,14 +6,17 @@ const PORT = 3000;
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/game', (req, res) => {
+app.get('/fight', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'fight.html'));
 });
-app.get('/', (req, res) => {
+app.get('/earnest', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'earnest.html'));
+});
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
-	console.log("currently defined endpoints are: /game and /") 
 });

@@ -11,7 +11,8 @@ class Orc {
         // Keep track of 'score' for genetic algo across generations
         // Will figure the cross generation stuff later - right now this is here as a note to myself
         this.breedableScore = 0; 
-        
+        this.x = 0;
+        this.y = 0; 
         assignPoints(this, total_points);
     }
 
