@@ -1,41 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>FIGHT!</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>FIGHT!</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <div class="panel blue">
+        <div class="info">
+          <label for="bluePos">Blue:</label>
+          <input id="bluePos" type="text" readonly />
+        </div>
+        <input id="blueAttack" value="2d6" />
+        <input id="blueMove" value="2" />
+        <input id="blueRange" value="0" />
+      </div>
 
-<div class="layout">
-
-  <div class="panel blue">
-    <div class="info">
-      <label for="bluePos">Blue:</label>
-      <input id="bluePos" type="text" readonly />
+      <div class="panel orange">
+        <div class="info">
+          <label for="orangePos">Orange:</label>
+          <input id="orangePos" type="text" readonly />
+        </div>
+        <input id="orangeAttack" value="1d6" />
+        <input id="orangeMove" value="1" />
+        <input id="orangeRange" value="1" />
+      </div>
     </div>
-    <input id="blueAttack" value="2d6" />
-    <input id="blueMove" value="2" />
-    <input id="blueRange" value="0" />
-  </div>
-
-  <div class="panel orange">
-    <div class="info">
-      <label for="orangePos">Orange:</label>
-      <input id="orangePos" type="text" readonly />
+    <hr />
+    <div class="panel">
+      <canvas id="hexCanvas" ></canvas>
+      <button onclick="blueMove()">blueMove</button>
+      <button onclick="orangeMove()">orangeMove</button>
     </div>
-    <input id="orangeAttack" value="1d6" />
-    <input id="orangeMove" value="1" />
-    <input id="orangeRange" value="1" />
-  </div>
 
-  <div class="panel">
-    <canvas id="hexCanvas" width="500" height="500"></canvas>
-    <button onclick="blueMove()">blueMove</button>
-    <button onclick="orangeMove()">orangeMove</button>
-  </div>
-</div>
-
-<script src="logic.js" ></script>
-</body>
+    <script src="logic.js"></script>
+  </body>
 </html>
