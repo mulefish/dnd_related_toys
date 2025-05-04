@@ -96,7 +96,7 @@ function randomNeighbor(col, row) {
 function drawShapes() {
     drawGrid();
 
-    const { x: x1, y: y1 } = grid[shape1.col][shape1.row];
+    const { x: x1, y: y1 } = grid[orc1.col][orc1.row];
     ctx.beginPath();
     ctx.arc(x1, y1, hexRadius, 0, Math.PI * 2);
     ctx.fillStyle = "blue";
@@ -107,12 +107,12 @@ function drawShapes() {
     const size = hexRadius * 1.5;
     ctx.fillRect(x2 - size / 2, y2 - size / 2, size, size);
 
-    blueInput.value = `(${shape1.col}, ${shape1.row})`;
+    blueInput.value = `(${orc1.col}, ${orc1.row})`;
     orangeInput.value = `(${shape2.col}, ${shape2.row})`;
 }
 
 function blueMove() {
-    [shape1.col, shape1.row] = randomNeighbor(shape1.col, shape1.row);
+    [orc1.col, orc1.row] = randomNeighbor(orc1.col, orc1.row);
     drawShapes();
 }
 
@@ -124,10 +124,11 @@ function orangeMove() {
 buildGrid();
 
 // Ensure initial placement **within the canvas and away from borders**
-const shape1 = {
-    col: Math.floor(Math.random() * (grid.length - 4)) + 2,
-    row: Math.floor(Math.random() * (grid[0].length - 4)) + 2,
-};
+
+const orc1 = new Orc(200);
+orc1.col = Math.floor(Math.random() * (grid.length - 4)) + 2
+orc1.row = Math.floor(Math.random() * (grid[0].length - 4)) + 2
+
 const shape2 = {
     col: Math.floor(Math.random() * (grid.length - 4)) + 2,
     row: Math.floor(Math.random() * (grid[0].length - 4)) + 2,
