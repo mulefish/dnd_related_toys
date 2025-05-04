@@ -16,6 +16,8 @@ const grid = [];
 
 const hardTerrianColor = "#e0e0e0";
 const easyTerrianColor = "#ffffff";
+const orcTrailColor = "#a0c4ff";     // muted blue
+const elfTrailColor = "#ffd6a5";     // muted orange
 
 function drawHex(x, y, radius, color) {
   ctx.beginPath();
@@ -73,6 +75,22 @@ function drawGrid() {
   }
 }
 
+function drawTrails() {
+  orcs.forEach((orc) => {
+    if (orc.prevCol !== undefined && orc.prevRow !== undefined) {
+      const { x, y } = grid[orc.prevCol][orc.prevRow];
+      drawHex(x, y, hexRadius, orcTrailColor);
+    }
+  });
+
+  elves.forEach((elf) => {
+    if (elf.prevCol !== undefined && elf.prevRow !== undefined) {
+      const { x, y } = grid[elf.prevCol][elf.prevRow];
+      drawHex(x, y, hexRadius, elfTrailColor);
+    }
+  });
+}
+
 function getNeighbors(col, row) {
   const directions = [
     [+1, 0],
@@ -94,15 +112,52 @@ function randomNeighbor(col, row) {
   return neighbors[Math.floor(Math.random() * neighbors.length)];
 }
 
+// function drawShapes() {
+//   drawGrid();
+//   drawTrails();
+
+//   orcs.forEach((orc, index) => {
+//     const { x, y } = grid[orc.col][orc.row];
+//     ctx.beginPath();
+//     ctx.arc(x, y, hexRadius, 0, Math.PI * 2);
+//     ctx.fillStyle = "blue";
+//     ctx.fill();
+//     if (blueInput && index === 0) {
+//       blueInput.value = `(${orc.col}, ${orc.row})`;
+//     }
+//   });
+
+//   elves.forEach((elf, index) => {
+//     const { x, y } = grid[elf.col][elf.row];
+//     ctx.beginPath();
+//     ctx.arc(x, y, hexRadius, 0, Math.PI * 2);
+//     ctx.fillStyle = "orange";
+//     ctx.fill();
+//     if (orangeInput && index === 0) {
+//       orangeInput.value = `(${elf.col}, ${elf.row})`;
+//     }
+//   });
+// }
+
 function drawShapes() {
   drawGrid();
+  drawTrails();
+
+  ctx.font = "10px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "bottom";
 
   orcs.forEach((orc, index) => {
     const { x, y } = grid[orc.col][orc.row];
+    ctx.fillStyle = "blue";
     ctx.beginPath();
     ctx.arc(x, y, hexRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "blue";
     ctx.fill();
+
+    // Name label above orc
+    ctx.fillStyle = "black";
+    ctx.fillText(orc.name, x, y - hexRadius - 2);
+
     if (blueInput && index === 0) {
       blueInput.value = `(${orc.col}, ${orc.row})`;
     }
@@ -110,18 +165,26 @@ function drawShapes() {
 
   elves.forEach((elf, index) => {
     const { x, y } = grid[elf.col][elf.row];
+    ctx.fillStyle = "orange";
     ctx.beginPath();
     ctx.arc(x, y, hexRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "orange";
     ctx.fill();
+
+    // Name label above elf
+    ctx.fillStyle = "black";
+    ctx.fillText(elf.name, x, y - hexRadius - 2);
+
     if (orangeInput && index === 0) {
       orangeInput.value = `(${elf.col}, ${elf.row})`;
     }
   });
 }
 
+
 function orcMoves() {
   orcs.forEach((orc) => {
+    orc.prevCol = orc.col;
+    orc.prevRow = orc.row;
     [orc.col, orc.row] = randomNeighbor(orc.col, orc.row);
   });
   drawShapes();
@@ -129,6 +192,8 @@ function orcMoves() {
 
 function elfMoves() {
   elves.forEach((elf) => {
+    elf.prevCol = elf.col;
+    elf.prevRow = elf.row;
     [elf.col, elf.row] = randomNeighbor(elf.col, elf.row);
   });
   drawShapes();
