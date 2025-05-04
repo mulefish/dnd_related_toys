@@ -1,0 +1,43 @@
+    body {
+      margin: 0;
+      font-family: sans-serif;
+    }
+    .layout {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      padding: 10px;
+      align-items: flex-start;
+    }
+    .panel {
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      min-width: 150px;
+      box-sizing: border-box;
+    }
+    .panel.blue {
+      background-color: lightblue;
+    }
+    .panel.orange {
+      background-color: orange;
+    }
+    .info {
+      margin-bottom: 10px;
+    }
+    .info label {
+      font-weight: bold;
+    }
+    .info input {
+      width: 80px;
+      text-align: center;
+      margin-left: 5px;
+    }
+    canvas {
+      border: 1px solid black;
+      background: white;
+      display: block;
+    }
+    button {
+      margin-top: 10px;
+    }
