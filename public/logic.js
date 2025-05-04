@@ -8,6 +8,7 @@ export class Hexagon {
     this.col = col;
     this.row = row;
     this.isDifficultTerrian = isDifficultTerrian;
+    this.cost = isDifficultTerrian ? 30 : 10 // Cost to traverse this Hexagon
   }
 }
 

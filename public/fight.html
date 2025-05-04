@@ -51,6 +51,20 @@
       drawShapes(); // assumes drawShapes is globally available
     }
   </script>
+<script type="module">
+        import { grid } from './logic.js';
+
+window.peek = function () {
+  try {
+    console.log("grid length: " + grid.length);
+    console.log(JSON.stringify(grid[0][0]));
+  } catch (boom) {
+    alert(boom);
+  }
+};
+    </script>
+
+    <button onclick="peek()">peek</button>
 
   <!-- Load logic first, then display -->
   <script type="module" src="logic.js"></script>
