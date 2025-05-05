@@ -41,6 +41,8 @@
     <canvas id="hexCanvas"></canvas>
     <button onclick="orcMoves()">orcMoves</button>
     <button onclick="elfMoves()">elfMoves</button>
+    <button onclick="orcLooks()">orcLooks</button>
+    <button onclick="elfLooks()">elfLooks</button>
   </div>
 
   <script>

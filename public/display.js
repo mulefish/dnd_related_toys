@@ -6,15 +6,18 @@ import {
     randomNeighbor,
     grid,
     Elf,
-    Orc
+    Orc, 
+    searchForEnemy
   } from './logic.js';
   
   const canvas = document.getElementById("hexCanvas");
   const ctx = canvas.getContext("2d");
   
   let debug = false;
-  let elves = [];
-  let orcs = [];
+  export let elves = [];
+  export let orcs = [];
+  window.elves = elves; 
+  
   
   window.toggleDebug = function () {
     debug = !debug;
@@ -38,9 +41,9 @@ import {
       ctx.fill();
       ctx.fillStyle = "black";
       ctx.fillText(orc.name, x, y - 10);
-      if (index === 0) {
-        document.getElementById("bluePos").value = `(${orc.col}, ${orc.row})`;
-      }
+      // if (index === 0) {
+      //   document.getElementById("bluePos").value = `(${orc.col}, ${orc.row})`;
+      // }
     });
   
     elves.forEach((elf, index) => {
@@ -56,6 +59,17 @@ import {
       }
     });
   }
+  window.elfLooks = function () { 
+    elves.forEach((elf) => {
+      searchForEnemy(elf)
+    }); 
+  }; 
+
+  window.orcLooks = function () { 
+    orcs.forEach((orc)=>{ 
+      searchForEnemy(orc) 
+    })
+  }; 
   
   window.elfMoves = function () {
     elves.forEach((elf) => {

@@ -1,5 +1,6 @@
 // logic.js
 import { Elf, Orc } from './Combatants.js';
+import { ELF_FLAG, ORC_FLAG } from './globals.js'
 
 export class Hexagon {
   constructor(x, y, col, row, isDifficultTerrian = false) {
@@ -63,7 +64,9 @@ export function buildGrid(targetCanvas) {
     }
   }
 }
-
+export function searchForEnemy(npc) {
+  console.log(npc.species, npc.name)
+}
 export function drawHex(ctx, x, y, radius, color) {
   ctx.beginPath();
   for (let i = 0; i < 6; i++) {

@@ -1,7 +1,9 @@
 // Combatants.js
+import { ELF_FLAG, ORC_FLAG, NULL } from './globals.js'
+
 export class Creature {
   constructor(total_points) {
-    this.name = "";
+    this.name = NULL
     this.selfPreservation = 0;
     this.goalDriven = 50;
     this.attack = 0;
@@ -13,12 +15,17 @@ export class Creature {
     this.breedableScore = 0;
     this.col = 0;
     this.row = 0;
+    this.species = NULL
+    this.target = NULL
+    this.angle = 0 
     assignPoints(this, total_points);
     this.specialFeatures();
   }
-
+  setTarget(targetName) {
+    this.target = targetName
+  }
   specialFeatures() {
-    // meant to be overridden
+    // Meant to be overridden
   }
 
   displayStats() {
@@ -30,12 +37,14 @@ export class Elf extends Creature {
   specialFeatures() {
     this.name = generateElfName();
     this.range = this.movement + Math.floor(this.movement * 0.25);
+    this.species = ELF_FLAG
   }
 }
 
 export class Orc extends Creature {
   specialFeatures() {
     this.name = generateOrcName();
+    this.species = ORC_FLAG
   }
 }
 
