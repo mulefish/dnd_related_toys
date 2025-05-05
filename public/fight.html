@@ -6,26 +6,10 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="layout">
-    <div class="panel blue">
-      <div class="info">
-        <label for="bluePos">Blue:</label>
-        <input id="bluePos" type="text" readonly />
-      </div>
-      <input id="blueAttack" value="2d6" />
-      <input id="blueMove" value="2" />
-      <input id="blueRange" value="0" />
-    </div>
-
-    <div class="panel orange">
-      <div class="info">
-        <label for="orangePos">Orange:</label>
-        <input id="orangePos" type="text" readonly />
-      </div>
-      <input id="orangeAttack" value="1d6" />
-      <input id="orangeMove" value="1" />
-      <input id="orangeRange" value="1" />
-    </div>
+  <div id="row-for-buttons-and-controls">
+  <button onclick="orcMoves()">orcMoves</button>
+  <button onclick="elfMoves()">elfMoves</button>
+  <button onclick="peek()">peek</button>
 
     <div>
       <div id="small-gray">Debug? <span id="isDebug">X</span></div>
@@ -36,11 +20,11 @@
     </div>
   </div>
 
+</div>
   <hr />
   <div class="panel">
     <canvas id="hexCanvas"></canvas>
-    <button onclick="orcMoves()">orcMoves</button>
-    <button onclick="elfMoves()">elfMoves</button>
+
   </div>
 
   <script>
@@ -64,7 +48,6 @@ window.peek = function () {
 };
     </script>
 
-    <button onclick="peek()">peek</button>
 
   <!-- Load logic first, then display -->
   <script type="module" src="logic.js"></script>

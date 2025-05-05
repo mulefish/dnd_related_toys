@@ -54,9 +54,6 @@ import {
       ctx.fill();
       ctx.fillStyle = "black";
       ctx.fillText(elf.name, x, y - 10);
-      if (index === 0) {
-        document.getElementById("orangePos").value = `(${elf.col}, ${elf.row})`;
-      }
     });
   }
   window.elfLooks = function () { 
