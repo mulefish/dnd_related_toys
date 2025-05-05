@@ -14,11 +14,11 @@ import {
   const ctx = canvas.getContext("2d");
   
   let debug = false;
-  let elves = [];
-  let orcs = [];
-  window.elves = elves;
-  window.orcs = orcs;
-
+  export let elves = [];
+  export let orcs = [];
+  window.elves = elves; 
+  
+  
   window.toggleDebug = function () {
     debug = !debug;
     document.getElementById("isDebug").innerText = debug ? "O" : "X";
@@ -41,9 +41,9 @@ import {
       ctx.fill();
       ctx.fillStyle = "black";
       ctx.fillText(orc.name, x, y - 10);
-      if (index === 0) {
-        document.getElementById("bluePos").value = `(${orc.col}, ${orc.row})`;
-      }
+      // if (index === 0) {
+      //   document.getElementById("bluePos").value = `(${orc.col}, ${orc.row})`;
+      // }
     });
   
     elves.forEach((elf, index) => {

@@ -41,13 +41,8 @@
     <canvas id="hexCanvas"></canvas>
     <button onclick="orcMoves()">orcMoves</button>
     <button onclick="elfMoves()">elfMoves</button>
-    <button onclick="orcLooks()">orcLooks</button>
-    <button onclick="elfLooks()">elfLooks</button>
-    <button onclick="showElves()">showElves</button>
   </div>
-  <script>
-    console.log( elves)
-  </script>
+
   <script>
     let debug = false;
     function toggleDebug() {
@@ -74,15 +69,5 @@ window.peek = function () {
   <!-- Load logic first, then display -->
   <script type="module" src="logic.js"></script>
   <script type="module" src="display.js"></script>
-
-
-    <script>
-      function showElves() {
-        console.log(elves)
-        console.log(orcs)
-
-      }
-    </script>
-
 </body>
 </html>
