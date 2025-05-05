@@ -6,7 +6,8 @@ import {
     randomNeighbor,
     grid,
     Elf,
-    Orc
+    Orc, 
+    searchForEnemy
   } from './logic.js';
   
   const canvas = document.getElementById("hexCanvas");
@@ -56,6 +57,17 @@ import {
       }
     });
   }
+  window.elfLooks = function () { 
+    elves.forEach((elf) => {
+      searchForEnemy(elf)
+    }); 
+  }; 
+
+  window.orcLooks = function () { 
+    orcs.forEach((orc)=>{ 
+      searchForEnemy(orc) 
+    })
+  }; 
   
   window.elfMoves = function () {
     elves.forEach((elf) => {
