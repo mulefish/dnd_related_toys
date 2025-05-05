@@ -16,7 +16,9 @@ import {
   let debug = false;
   let elves = [];
   let orcs = [];
-  
+  window.elves = elves;
+  window.orcs = orcs;
+
   window.toggleDebug = function () {
     debug = !debug;
     document.getElementById("isDebug").innerText = debug ? "O" : "X";
