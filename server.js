@@ -1,20 +1,27 @@
-const express = require('express');
-const path = require('path');
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
 const app = express();
 const PORT = 3000;
 
-app.use(express.static(path.join(__dirname, 'public')));
+// Get __dirname equivalent in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+app.use(express.static(join(__dirname, 'public')));
 
 app.get('/fight', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'fight.html'));
+    res.sendFile(join(__dirname, 'public', 'fight.html'));
 });
+
 app.get('/earnest', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'earnest.html'));
+    res.sendFile(join(__dirname, 'public', 'earnest.html'));
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
