@@ -89,17 +89,17 @@ import {
   // INITIALIZE
   buildGrid(canvas);
   
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 20; i++) {
     const orc = new Orc(200);
-    orc.col = 30 + Math.floor(Math.random() * 10);
-    orc.row = 3 + Math.floor(Math.random() * 10);
+    orc.col = 25 + Math.floor(Math.random() * 10);
+    orc.row = 1 + Math.floor(Math.random() * 15);
     orcs.push(orc);
   }
   
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 10; i++) {
     const elf = new Elf(200);
-    elf.col = 3 + Math.floor(Math.random() * 10);
-    elf.row = 3 + Math.floor(Math.random() * 10);
+    elf.col = 1 + Math.floor(Math.random() * 10);
+    elf.row = 1 + Math.floor(Math.random() * 15);
     elves.push(elf);
   }
   

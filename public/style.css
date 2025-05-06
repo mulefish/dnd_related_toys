@@ -42,6 +42,32 @@ canvas {
 button {
   margin-top: 10px;
 }
+/* LAYOUT */ 
+.row {
+  display: flex;
+  flex-direction: row;
+  height: 100vh; /* Full viewport height */
+}
+
+.col {
+  padding: 10px;
+  flex: 1; /* All columns share space equally unless overridden */
+  box-sizing: border-box;
+}
+
+.panel {
+  flex: 3; /* Make canvas area larger */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+canvas#hexCanvas {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #ff0000; /* Optional: gives a visible boundary */
+}
+
 /* Row of buttons */
  #row-for-buttons-and-controls {
       display: flex;          

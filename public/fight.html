@@ -22,9 +22,16 @@
 
 </div>
   <hr />
-  <div class="panel">
-    <canvas id="hexCanvas"></canvas>
+  <div class="row">
+    <div class="col" id="orderOfPlayTable">
 
+    </div>
+  
+    
+    <div class="col">
+      <canvas id="hexCanvas"></canvas>
+    </div>
+  
   </div>
 
   <script>
@@ -36,7 +43,7 @@
     }
   </script>
 <script type="module">
-        import { grid } from './logic.js';
+import { grid } from './logic.js';
 
 window.peek = function () {
   try {
@@ -52,5 +59,41 @@ window.peek = function () {
   <!-- Load logic first, then display -->
   <script type="module" src="logic.js"></script>
   <script type="module" src="display.js"></script>
+
+
+  <script type="module">
+    import { elves, orcs } from './display.js';
+    import { ORC_FLAG, ELF_FLAG } from './globals.js';
+    import { grid } from './logic.js';
+  
+    try {
+      const combined = [...elves, ...orcs].sort((a, b) => b.initiative - a.initiative);
+      let table = "<table border='1'><tr><th>name</th><th>dmg</th><th>hp</th><th>init</th><th>target</th></tr>";
+  
+      combined.forEach((creature) => {
+        const css = creature.species === ORC_FLAG ? "lightgray" : "white"; 
+        const name = creature.name;
+        const hp = creature.hitpoints;
+        const target = "";
+        let row = `<tr style='background-color:${css}'>`;
+        row += `<td>${name}</td>`;
+        row += `<td id='${name}_dmg' align='left'>0</td>`;
+        row += `<td align='left'>${hp}</td>`;
+        row += `<td  align='left'>${creature.initiative}</td>`;
+        row += `<td id='${name}_target'>${target}</td>`;
+        row += "</tr>";
+        table += row;
+      });
+  
+      table += "</table>";
+      document.getElementById("orderOfPlayTable").innerHTML = table;
+  console.log("grid " + grid.length + "  and " + grid[0].length )
+    } catch (boom) {
+      console.log(boom);
+    }
+  </script>
+  
+
+
 </body>
 </html>

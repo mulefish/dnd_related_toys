@@ -23,7 +23,7 @@ export function buildGrid(targetCanvas) {
   const ctx = canvas.getContext("2d");
 
   const dpr = window.devicePixelRatio || 1;
-  const sidebarOffset = 50;
+  const sidebarOffset = 0;
   const cssWidth = window.innerWidth - sidebarOffset;
   const cssHeight = 600;
   canvas.width = cssWidth * dpr;
@@ -38,8 +38,13 @@ export function buildGrid(targetCanvas) {
   const vertDist = hexHeight;
   const horizDist = (3 / 4) * hexWidth;
 
-  const rows = Math.floor(canvas.height / vertDist) + 2;
-  const cols = Math.floor(canvas.width / horizDist) + 2;
+  // const rows = Math.floor(canvas.height / vertDist) + 2;
+  // const cols = Math.floor(canvas.width / horizDist) + 2;
+
+  const rows = 20;
+  const cols = 40;
+
+
 
   for (let col = 0; col < cols; col++) {
     grid[col] = [];
