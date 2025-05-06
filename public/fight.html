@@ -1,99 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>FIGHT!</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div id="row-for-buttons-and-controls">
-  <button onclick="orcMoves()">orcMoves</button>
-  <button onclick="elfMoves()">elfMoves</button>
-  <button onclick="peek()">peek</button>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div style="display: flex; height: 100vh; box-sizing: border-box">
+      <div
+        style="
+          width: 300px;
+          padding: 10px;
+          box-sizing: border-box;
+          border-right: 1px solid #ccc;
+        "
+      >
+        <button id="toggleLabels">Show Hex Labels</button>
+        <h3>Unit Table</h3>
+        <table border="1" style="width: 100%; border-collapse: collapse">
+          <tr>
+            <th>Name</th>
+            <th>HP</th>
+          </tr>
+          <tr>
+            <td>Elf</td>
+            <td>100</td>
+          </tr>
+          <tr>
+            <td>Orc</td>
+            <td>120</td>
+          </tr>
+        </table>
+      </div>
 
-    <div>
-      <div id="small-gray">Debug? <span id="isDebug">X</span></div>
-      <label id="debugSwitch">
-        <input type="checkbox" id="myToggle" onchange="toggleDebug()">
-        <span id="slider"></span>
-      </label>
+      <div style="flex: 1; padding: 10px">
+        <canvas id="hexCanvas"></canvas>
+      </div>
     </div>
-  </div>
 
-</div>
-  <hr />
-  <div class="row">
-    <div class="col" id="orderOfPlayTable">
-
-    </div>
-  
-    
-    <div class="col">
-      <canvas id="hexCanvas"></canvas>
-    </div>
-  
-  </div>
-
-  <script>
-    let debug = false;
-    function toggleDebug() {
-      debug = !debug;
-      document.getElementById("isDebug").textContent = debug ? "O" : "X";
-      drawShapes(); // assumes drawShapes is globally available
-    }
-  </script>
-<script type="module">
-import { grid } from './logic.js';
-
-window.peek = function () {
-  try {
-    console.log("grid length: " + grid.length);
-    console.log(JSON.stringify(grid[0][0]));
-  } catch (boom) {
-    alert(boom);
-  }
-};
-    </script>
-
-
-  <!-- Load logic first, then display -->
-  <script type="module" src="logic.js"></script>
-  <script type="module" src="display.js"></script>
-
-
-  <script type="module">
-    import { elves, orcs } from './display.js';
-    import { ORC_FLAG, ELF_FLAG } from './globals.js';
-    import { grid } from './logic.js';
-  
-    try {
-      const combined = [...elves, ...orcs].sort((a, b) => b.initiative - a.initiative);
-      let table = "<table border='1'><tr><th>name</th><th>dmg</th><th>hp</th><th>init</th><th>target</th></tr>";
-  
-      combined.forEach((creature) => {
-        const css = creature.species === ORC_FLAG ? "lightgray" : "white"; 
-        const name = creature.name;
-        const hp = creature.hitpoints;
-        const target = "";
-        let row = `<tr style='background-color:${css}'>`;
-        row += `<td>${name}</td>`;
-        row += `<td id='${name}_dmg' align='left'>0</td>`;
-        row += `<td align='left'>${hp}</td>`;
-        row += `<td  align='left'>${creature.initiative}</td>`;
-        row += `<td id='${name}_target'>${target}</td>`;
-        row += "</tr>";
-        table += row;
-      });
-  
-      table += "</table>";
-      document.getElementById("orderOfPlayTable").innerHTML = table;
-  console.log("grid " + grid.length + "  and " + grid[0].length )
-    } catch (boom) {
-      console.log(boom);
-    }
-  </script>
-  
-
-
-</body>
+    <script type="module" src="./display2.js"></script>
+  </body>
 </html>
