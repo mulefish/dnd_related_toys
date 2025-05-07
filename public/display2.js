@@ -7,7 +7,7 @@
     const viewportHeight = 1000;
 
     const hexCols = 30;
-    const hexRows = 20;
+    const hexRows = 20; 
 
     // Compute max hex radius that fits both dimensions
     const maxRadiusX = viewportWidth / ((hexCols - 1) * 3/2 + 2);
