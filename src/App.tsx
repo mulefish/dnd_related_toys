@@ -6,10 +6,8 @@ import Information from './Information';
 import { useSelector } from 'react-redux';
 import { RootState } from './store/store';
 
-const HEX_COLS = 30;
-const HEX_ROWS = 20;
-const SIDEBAR_WIDTH = 250;
-const VIEWPORT_MARGIN = 24;
+const SIDEBAR_WIDTH = 500;
+const VIEWPORT_MARGIN = 1;
 
 export default function App() {
 
@@ -26,7 +24,7 @@ export default function App() {
     window.innerHeight - 120
   );
 
-  useCommunication(viewportWidth, viewportHeight, HEX_COLS, HEX_ROWS);
+  useCommunication(viewportWidth, viewportHeight);
 
   useEffect(() => {
     const handleResize = () => {

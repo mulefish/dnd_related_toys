@@ -15,10 +15,8 @@ def calculate_grid():
         data = request.json
         print("Received data:", data)
 
-        hexCols = data['hexCols']
-        hexRows = data['hexRows']
+        grid = generate_hex_grid()
 
-        grid = generate_hex_grid(hexRows, hexCols)
         return jsonify(grid)
 
     except Exception as e:

@@ -1,8 +1,10 @@
-# grid_generator.py
+# python_logic/grid_generator.py
 import math
 import random
+from python_logic.globals import ROWS, COLS  # Import shared dimensions
 
-def generate_hex_grid(hexRows, hexCols, base_prob=0.05, neighbor_boost=0.3):
+def generate_hex_grid(base_prob=0.05, neighbor_boost=0.3):
+    hexRows, hexCols = ROWS, COLS
     grid = [[{'row': r, 'col': c, 'cost': 0} for c in range(hexCols)] for r in range(hexRows)]
 
     def get_neighbors(r, c):

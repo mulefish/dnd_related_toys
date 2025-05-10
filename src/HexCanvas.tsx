@@ -1,23 +1,19 @@
 import { useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from './store/store';
-import { JSX } from 'react/jsx-runtime';
 import './index.css';
-
 
 type HexCanvasProps = {
   width: number;
   height: number;
 };
-//const viewportWidth = 1000;
-// const viewportHeight = 1000;
 
 export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Element {
-  const showLabels = useSelector((state: RootState) => state.grid.showLabels);
-
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const showLabels = useSelector((state: RootState) => state.grid.showLabels);
   const params = useSelector((state: RootState) => state.grid.params);
   const grid = useSelector((state: RootState) => state.grid.grid);
+  const creatures = useSelector((state: RootState) => state.creatures.creatures);
 
   useEffect(() => {
     if (!params || grid.length === 0) return;
@@ -37,11 +33,6 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
     canvas.style.height = `${height}px`;
 
     ctx.clearRect(0, 0, width, height);
-
-    // canvas.width = viewportWidth * dpr;
-    // canvas.height = viewportHeight * dpr;
-    // canvas.style.width = `${viewportWidth}px`;
-    // canvas.style.height = `${viewportHeight}px`;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     function drawHex(
@@ -75,9 +66,32 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
       }
     }
 
+    function drawCreature(
+      ctx: CanvasRenderingContext2D,
+      x: number,
+      y: number,
+      type: string
+    ) {
+      const size = hexRadius * 0.6;
+
+      if (type === 'ELF') {
+        ctx.beginPath();
+        ctx.arc(x, y, size / 2, 0, 2 * Math.PI);
+        ctx.fillStyle = '#90ee90'; // light green
+        ctx.fill();
+        ctx.strokeStyle = '#006400'; // dark green border
+        ctx.stroke();
+      } else if (type === 'ORC') {
+        ctx.beginPath();
+        ctx.fillStyle = 'orange';
+        ctx.fillRect(x - size / 2, y - size / 2, size, size);
+        ctx.strokeStyle = '#8b4513'; // dark brown border
+        ctx.strokeRect(x - size / 2, y - size / 2, size, size);
+      }
+    }
+
     function drawGrid(ctx: CanvasRenderingContext2D) {
       ctx.clearRect(0, 0, width, height);
-
 
       for (const row of grid) {
         for (const tile of row) {
@@ -88,7 +102,7 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
             r * vertSpacing +
             (col % 2 === 0 ? 0 : vertSpacing / 2);
 
-          const color = cost === 30 ? '#ffcccc' : '#ffffff'; // red tint if high cost
+          const color = cost === 30 ? '#e0e0e0' : '#ffffff';
           const label = showLabels ? `${col},${r}` : '';
 
           drawHex(ctx, x, y, hexRadius - 0.5, color, label);
@@ -97,7 +111,14 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
     }
 
     drawGrid(ctx);
-  }, [params, grid, showLabels]);
+
+    for (const creature of creatures) {
+      const { col, row, species } = creature;
+      const x = offsetX + col * horizSpacing + hexRadius;
+      const y = offsetY + row * vertSpacing + (col % 2 === 0 ? 0 : vertSpacing / 2);
+      drawCreature(ctx, x, y, species);
+    }
+  }, [params, grid, showLabels, creatures, width, height]);
 
   return <canvas ref={canvasRef} />;
 }
