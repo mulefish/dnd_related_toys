@@ -1,22 +1,12 @@
-# dnd_related_toys
-https://github.com/mulefish/dnd_related_toys/
+# React + Vite
 
-# Dependancies: 
-node + express
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-# DONE 1:
-Orc and Elf creation
-# DONE 2:
-Viewport 
+Currently, two official plugins are available:
 
-# TODO 1: 
-Game mechanics (hitbox? range attack? other? How to move? etc)
-# TODO 2: 
-AI
-# TODO 3: 
-Genetic algo
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-# Screenshot:
-![Screenshot](./Screenshot_2025-05-04_114045.png)
+## Expanding the ESLint configuration
 
-
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.

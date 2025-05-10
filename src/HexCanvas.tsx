@@ -1,44 +1,55 @@
-    const canvas = document.getElementById('hexCanvas');
+import React, { useRef, useEffect } from 'react';
+import { JSX } from 'react/jsx-runtime';
+
+type HexCanvasProps = {
+  showLabels: boolean;
+};
+
+export default function HexCanvas({ showLabels }: HexCanvasProps): JSX.Element {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
     const ctx = canvas.getContext('2d');
-    const toggleButton = document.getElementById('toggleLabels');
-    let showLabels = false;
+    if (!ctx) return;
 
     const viewportWidth = 1000;
     const viewportHeight = 1000;
-
     const hexCols = 30;
-    const hexRows = 20; 
+    const hexRows = 20;
 
-    // Compute max hex radius that fits both dimensions
-    const maxRadiusX = viewportWidth / ((hexCols - 1) * 3/2 + 2);
+    const maxRadiusX = viewportWidth / (((hexCols - 1) * 3) / 2 + 2);
     const maxRadiusY = viewportHeight / ((hexRows - 1) * Math.sqrt(3) + 1);
     const hexRadius = Math.min(maxRadiusX, maxRadiusY);
 
     const hexWidth = hexRadius * 2;
     const hexHeight = Math.sqrt(3) * hexRadius;
-    const horizSpacing = 3/2 * hexRadius;
+    const horizSpacing = (3 / 2) * hexRadius;
     const vertSpacing = hexHeight;
 
-    // Compute total actual grid size
-    const gridWidth = horizSpacing * (hexCols - 1) + hexWidth;
-    const gridHeight = vertSpacing * hexRows;
+    const offsetX = 0;
+    const offsetY = 20;
 
-    // Centering offsets
-    const offsetX = 0 // (viewportWidth - gridWidth) / 2;
-    const offsetY = 20 // hexHeight // (viewportHeight - gridHeight) / 2;
-
-    // Set canvas size with DPR scaling
     const dpr = window.devicePixelRatio || 1;
     canvas.width = viewportWidth * dpr;
     canvas.height = viewportHeight * dpr;
-    canvas.style.width = viewportWidth + 'px';
-    canvas.style.height = viewportHeight + 'px';
+    canvas.style.width = `${viewportWidth}px`;
+    canvas.style.height = `${viewportHeight}px`;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    function drawHex(x, y, radius, color = '#fff', label = '') {
+    function drawHex(
+      ctx: CanvasRenderingContext2D,
+      x: number,
+      y: number,
+      radius: number,
+      color: string = '#fff',
+      label: string = ''
+    ) {
       ctx.beginPath();
       for (let i = 0; i < 6; i++) {
-        const angle = Math.PI / 3 * i;
+        const angle = (Math.PI / 3) * i;
         const xi = x + radius * Math.cos(angle);
         const yi = y + radius * Math.sin(angle);
         ctx.lineTo(xi, yi);
@@ -59,21 +70,19 @@
       }
     }
 
-    function drawGrid() {
+    function drawGrid(ctx: CanvasRenderingContext2D) {
       ctx.clearRect(0, 0, viewportWidth, viewportHeight);
       for (let col = 0; col < hexCols; col++) {
         for (let row = 0; row < hexRows; row++) {
           const x = offsetX + col * horizSpacing + hexRadius;
           const y = offsetY + row * vertSpacing + (col % 2 === 0 ? 0 : vertSpacing / 2);
-          drawHex(x, y, hexRadius - 0.5, '#ffffff', `(${col},${row})`);
+          drawHex(ctx, x, y, hexRadius - 0.5, '#ffffff', `(${col},${row})`);
         }
       }
     }
 
-    toggleButton.addEventListener('click', () => {
-      showLabels = !showLabels;
-      toggleButton.innerText = showLabels ? 'Hide Hex Labels' : 'Show Hex Labels';
-      drawGrid();
-    });
+    drawGrid(ctx);
+  }, [showLabels]);
 
-    drawGrid();
+  return <canvas ref={canvasRef} />;
+}
