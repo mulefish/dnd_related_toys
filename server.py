@@ -1,7 +1,7 @@
 # app.py
 from flask import Flask, request, jsonify
 from flask_cors import CORS # type: ignore
-from grid_generator import generate_hex_grid
+from python_logic.grid_generator import generate_hex_grid
 import traceback
 traceback.print_exc()
 
