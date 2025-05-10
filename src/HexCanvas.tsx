@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from './store/store';
 
@@ -8,15 +8,14 @@ type HexCanvasProps = {
 
 const viewportWidth = 1000;
 const viewportHeight = 1000;
-const hexCols = 30;
-const hexRows = 20;
 
 export default function HexCanvas({ showLabels }: HexCanvasProps): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const params = useSelector((state: RootState) => state.grid.params);
+  const grid = useSelector((state: RootState) => state.grid.grid);
 
   useEffect(() => {
-    if (!params) return;
+    if (!params || grid.length === 0) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -66,20 +65,26 @@ export default function HexCanvas({ showLabels }: HexCanvasProps): JSX.Element {
 
     function drawGrid(ctx: CanvasRenderingContext2D) {
       ctx.clearRect(0, 0, viewportWidth, viewportHeight);
-      for (let col = 0; col < hexCols; col++) {
-        for (let row = 0; row < hexRows; row++) {
-          const x = offsetX + col * horizSpacing + params.hexRadius;
+
+      for (const row of grid) {
+        for (const tile of row) {
+          const { col, row: r, cost } = tile;
+          const x = offsetX + col * horizSpacing + hexRadius;
           const y =
             offsetY +
-            row * vertSpacing +
+            r * vertSpacing +
             (col % 2 === 0 ? 0 : vertSpacing / 2);
-          drawHex(ctx, x, y, params.hexRadius - 0.5, '#ffffff', `(${col},${row})`);
+
+          const color = cost === 30 ? '#ffcccc' : '#ffffff'; // red tint if high cost
+          const label = showLabels ? `${col},${r}` : '';
+
+          drawHex(ctx, x, y, hexRadius - 0.5, color, label);
         }
       }
     }
 
     drawGrid(ctx);
-  }, [params, showLabels]);
+  }, [params, grid, showLabels]);
 
   return <canvas ref={canvasRef} />;
 }
