@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, JSX } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from './store/store';
 import './index.css';
@@ -66,14 +66,65 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
       }
     }
 
+    // function drawCreature(
+    //   ctx: CanvasRenderingContext2D,
+    //   x: number,
+    //   y: number,
+    //   type: string,
+    //   name: string, 
+    //   hitpoints: number, 
+    //   damage : number
+    // ) {
+    //   const size = hexRadius * 0.8;
+
+    //   if (type === 'ELF') {
+    //     ctx.beginPath();
+    //     ctx.arc(x, y, size / 2, 0, 2 * Math.PI);
+    //     ctx.fillStyle = '#90ee90'; // light green
+    //     ctx.fill();
+    //     ctx.strokeStyle = '#006400'; // dark green border
+    //     ctx.stroke();
+    //   } else if (type === 'ORC') {
+    //     ctx.beginPath();
+    //     ctx.fillStyle = 'orange';
+    //     ctx.fillRect(x - size / 2, y - size / 2, size, size);
+    //     ctx.strokeStyle = '#8b4513'; // dark brown border
+    //     ctx.strokeRect(x - size / 2, y - size / 2, size, size);
+    //   }
+    // }
+
     function drawCreature(
       ctx: CanvasRenderingContext2D,
       x: number,
       y: number,
-      type: string
+      type: string,
+      name: string,
+      hitpoints: number,
+      damage: number
     ) {
-      const size = hexRadius * 0.6;
+      const size = hexRadius * 0.8;
+      const remainingHP = Math.max(hitpoints - damage, 0);
+      const maxLineWidth = size;
+      const hpRatio = Math.min(1, remainingHP / hitpoints);
+      const lineWidth = maxLineWidth * hpRatio;
 
+      // Draw name above creature
+      ctx.fillStyle = '#bbb';
+      ctx.font = '10px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText(name, x, y - size / 1.2);
+
+      // Draw health bar under name
+      ctx.beginPath();
+      ctx.strokeStyle = hpRatio > 0.6 ? '#44aa44' : hpRatio > 0.3 ? '#ffaa00' : '#cc2222';
+      ctx.lineWidth = 3;
+      const lineY = y - size * 0.8;
+      ctx.moveTo(x - lineWidth / 2, lineY);
+      ctx.lineTo(x + lineWidth / 2, lineY);
+      ctx.stroke();
+
+      // Draw creature body
       if (type === 'ELF') {
         ctx.beginPath();
         ctx.arc(x, y, size / 2, 0, 2 * Math.PI);
@@ -89,6 +140,8 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
         ctx.strokeRect(x - size / 2, y - size / 2, size, size);
       }
     }
+
+
 
     function drawGrid(ctx: CanvasRenderingContext2D) {
       ctx.clearRect(0, 0, width, height);
@@ -113,10 +166,10 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
     drawGrid(ctx);
 
     for (const creature of creatures) {
-      const { col, row, species } = creature;
+      const { col, row, species, name, hitpoints, damage } = creature;
       const x = offsetX + col * horizSpacing + hexRadius;
       const y = offsetY + row * vertSpacing + (col % 2 === 0 ? 0 : vertSpacing / 2);
-      drawCreature(ctx, x, y, species);
+      drawCreature(ctx, x, y, species, name, hitpoints, damage);
     }
   }, [params, grid, showLabels, creatures, width, height]);
 

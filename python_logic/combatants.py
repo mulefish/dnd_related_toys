@@ -59,6 +59,7 @@ class Creature:
         self.goal_driven = 50
         self.attack = 0
         self.hitpoints = 0
+        self.damage = 0
         self.movement = 0
         self.sight = 0
         self.initiative = 0
