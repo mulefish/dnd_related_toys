@@ -14,6 +14,7 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
   const params = useSelector((state: RootState) => state.grid.params);
   const grid = useSelector((state: RootState) => state.grid.grid);
   const creatures = useSelector((state: RootState) => state.creatures.creatures);
+  const activeIndex = useSelector((state: RootState) => state.creatures.activeIndex);
 
   useEffect(() => {
     if (!params || grid.length === 0) return;
@@ -66,32 +67,6 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
       }
     }
 
-    // function drawCreature(
-    //   ctx: CanvasRenderingContext2D,
-    //   x: number,
-    //   y: number,
-    //   type: string,
-    //   name: string, 
-    //   hitpoints: number, 
-    //   damage : number
-    // ) {
-    //   const size = hexRadius * 0.8;
-
-    //   if (type === 'ELF') {
-    //     ctx.beginPath();
-    //     ctx.arc(x, y, size / 2, 0, 2 * Math.PI);
-    //     ctx.fillStyle = '#90ee90'; // light green
-    //     ctx.fill();
-    //     ctx.strokeStyle = '#006400'; // dark green border
-    //     ctx.stroke();
-    //   } else if (type === 'ORC') {
-    //     ctx.beginPath();
-    //     ctx.fillStyle = 'orange';
-    //     ctx.fillRect(x - size / 2, y - size / 2, size, size);
-    //     ctx.strokeStyle = '#8b4513'; // dark brown border
-    //     ctx.strokeRect(x - size / 2, y - size / 2, size, size);
-    //   }
-    // }
 
     function drawCreature(
       ctx: CanvasRenderingContext2D,
@@ -152,10 +127,16 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
           const x = offsetX + col * horizSpacing + hexRadius;
           const y =
             offsetY +
-            r * vertSpacing +
+            r * vertSpacing + 
             (col % 2 === 0 ? 0 : vertSpacing / 2);
 
-          const color = cost === 30 ? '#e0e0e0' : '#ffffff';
+          // const color = cost === 30 ? '#e0e0e0' : '#ffffff';
+          let color = cost === 30 ? '#e0e0e0' : '#ffffff';
+          const activeCreature = creatures[activeIndex ?? -1];
+          if (activeCreature && activeCreature.row === r && activeCreature.col === col) {
+            color = 'yellow';
+          }
+
           const label = showLabels ? `${col},${r}` : '';
 
           drawHex(ctx, x, y, hexRadius - 0.5, color, label);
@@ -171,7 +152,7 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
       const y = offsetY + row * vertSpacing + (col % 2 === 0 ? 0 : vertSpacing / 2);
       drawCreature(ctx, x, y, species, name, hitpoints, damage);
     }
-  }, [params, grid, showLabels, creatures, width, height]);
+  }, [params, grid, showLabels, creatures, activeIndex, width, height, ]);
 
   return <canvas ref={canvasRef} />;
 }

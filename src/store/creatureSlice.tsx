@@ -7,15 +7,17 @@ type Creature = {
   row: number;
   angle: number;
   cost: number;
-  [key: string]: any; // to allow flexible attributes
+  [key: string]: any;
 };
 
 type CreatureState = {
   creatures: Creature[];
+  activeIndex: number | null;
 };
 
 const initialState: CreatureState = {
   creatures: [],
+  activeIndex: null,
 };
 
 export const creatureSlice = createSlice({
@@ -24,9 +26,16 @@ export const creatureSlice = createSlice({
   reducers: {
     setCreatures(state, action: PayloadAction<Creature[]>) {
       state.creatures = action.payload;
+      state.activeIndex = action.payload.length > 0 ? 0 : null;
+    },
+    nextCreature(state) {
+      if (state.creatures.length === 0) return;
+      state.activeIndex = state.activeIndex === null
+        ? 0
+        : (state.activeIndex + 1) % state.creatures.length;
     },
   },
 });
 
-export const { setCreatures } = creatureSlice.actions;
+export const { setCreatures, nextCreature } = creatureSlice.actions;
 export default creatureSlice.reducer;

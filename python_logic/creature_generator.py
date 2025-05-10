@@ -40,6 +40,8 @@ class CreatureGenerator:
             orc.row, orc.col = self.get_random_position(orc_col_range)
             combatants.append(orc)
 
+        combatants.sort(key=lambda c: c.initiative, reverse=True)
+
         return combatants
 
 
