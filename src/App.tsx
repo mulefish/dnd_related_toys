@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import HexCanvas from './HexCanvas';
+import { useCommunication } from './useCommunication';
 
-export default function App()  {
-  const [showLabels, setShowLabels] = useState<boolean>(false);
+export default function App() {
+  const [showLabels, setShowLabels] = useState(false);
+
+  useCommunication(); // fire the network call on mount
 
   return (
     <div style={{ display: 'flex', height: '100vh', boxSizing: 'border-box' }}>
