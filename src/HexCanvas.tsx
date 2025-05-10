@@ -1,15 +1,19 @@
 import { useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from './store/store';
+import { JSX } from 'react/jsx-runtime';
+import './index.css';
+
 
 type HexCanvasProps = {
   showLabels: boolean;
+  width: number;
+  height: number;
 };
+//const viewportWidth = 1000;
+// const viewportHeight = 1000;
 
-const viewportWidth = 1000;
-const viewportHeight = 1000;
-
-export default function HexCanvas({ showLabels }: HexCanvasProps): JSX.Element {
+export default function HexCanvas({ showLabels, width, height }: HexCanvasProps): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const params = useSelector((state: RootState) => state.grid.params);
   const grid = useSelector((state: RootState) => state.grid.grid);
@@ -26,10 +30,17 @@ export default function HexCanvas({ showLabels }: HexCanvasProps): JSX.Element {
     const { hexRadius, horizSpacing, vertSpacing, offsetX, offsetY } = params;
 
     const dpr = window.devicePixelRatio || 1;
-    canvas.width = viewportWidth * dpr;
-    canvas.height = viewportHeight * dpr;
-    canvas.style.width = `${viewportWidth}px`;
-    canvas.style.height = `${viewportHeight}px`;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+
+    ctx.clearRect(0, 0, width, height);
+
+    // canvas.width = viewportWidth * dpr;
+    // canvas.height = viewportHeight * dpr;
+    // canvas.style.width = `${viewportWidth}px`;
+    // canvas.style.height = `${viewportHeight}px`;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     function drawHex(
@@ -64,7 +75,8 @@ export default function HexCanvas({ showLabels }: HexCanvasProps): JSX.Element {
     }
 
     function drawGrid(ctx: CanvasRenderingContext2D) {
-      ctx.clearRect(0, 0, viewportWidth, viewportHeight);
+      ctx.clearRect(0, 0, width, height);
+
 
       for (const row of grid) {
         for (const tile of row) {

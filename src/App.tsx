@@ -1,50 +1,58 @@
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import HexCanvas from './HexCanvas';
 import { useCommunication } from './useCommunication';
+import GatheringInformation from './GatheringInformation';  // ✅
+import { useSelector } from 'react-redux';
+import { RootState } from './store/store';
+
+const HEX_COLS = 30;
+const HEX_ROWS = 20;
+const SIDEBAR_WIDTH = 250;
+const VIEWPORT_MARGIN = 24;
 
 export default function App() {
-  const [showLabels, setShowLabels] = useState(false);
 
-  // fire onMount!
-  useCommunication(1000, 1000, 30, 20);
+  const params = useSelector((state: RootState) => state.grid.params);
+  const grid = useSelector((state: RootState) => state.grid.grid);
+  
+  const isReady = params !== null && grid.length > 0;
+  
 
+  const [viewportWidth, setViewportWidth] = useState<number>(
+    window.innerWidth - SIDEBAR_WIDTH - VIEWPORT_MARGIN
+  );
+  const [viewportHeight, setViewportHeight] = useState<number>(
+    window.innerHeight - 120
+  );
+
+  useCommunication(viewportWidth, viewportHeight, HEX_COLS, HEX_ROWS);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setViewportWidth(window.innerWidth - SIDEBAR_WIDTH - VIEWPORT_MARGIN);
+      setViewportHeight(window.innerHeight - 120);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
-    <div style={{ display: 'flex', height: '100vh', boxSizing: 'border-box' }}>
-      <div
-        style={{
-          width: '300px',
-          padding: '10px',
-          boxSizing: 'border-box',
-          borderRight: '1px solid #ccc',
-        }}
-      >
-        <button onClick={() => setShowLabels((prev) => !prev)}>
-          {showLabels ? 'Hide Hex Labels' : 'Show Hex Labels'}
-        </button>
-        <h3>Unit Table</h3>
-        <table border={1} style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>HP</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Elf</td>
-              <td>100</td>
-            </tr>
-            <tr>
-              <td>Orc</td>
-              <td>120</td>
-            </tr>
-          </tbody>
-        </table>
+    <div style={{ display: 'flex' }}>
+      <div style={{ width: `${SIDEBAR_WIDTH}px`, borderRight: '1px solid #ccc' }}>
+        <p>Sidebar Table</p>
       </div>
-
-      <div style={{ flex: 1, padding: '10px' }}>
-        <HexCanvas showLabels={showLabels} />
+  
+      <div className="hex-container">
+        {isReady ? (
+          <HexCanvas
+            showLabels={true}
+            width={viewportWidth}
+            height={viewportHeight}
+          />
+        ) : (
+          <GatheringInformation />
+        )}
       </div>
     </div>
   );

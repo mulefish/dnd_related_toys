@@ -1,3 +1,10 @@
 canvas {
   background-color: yellow;
 }
+
+.hex-container {
+  border: 2px solid #444;
+  margin: 12px;
+  padding: 4px;
+  background-color: #fafafa;
+}
