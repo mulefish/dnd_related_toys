@@ -1,0 +1,3 @@
+ELF_FLAG = "ELF"
+ORC_FLAG = "ORC"
+NULL = None
