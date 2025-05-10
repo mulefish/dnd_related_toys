@@ -18,12 +18,14 @@ type HexTile = {
 
 type GridState = {
   params: HexParams | null;
-  grid: HexTile[][];  // 2D array of tiles
+  grid: HexTile[][];
+  showLabels: boolean;
 };
 
 const initialState: GridState = {
   params: null,
   grid: [],
+  showLabels: false
 };
 
 export const gridSlice = createSlice({
@@ -36,8 +38,11 @@ export const gridSlice = createSlice({
     setGrid: (state, action: PayloadAction<HexTile[][]>) => {
       state.grid = action.payload;
     },
+    toggleShowLabels: (state) => {
+      state.showLabels = !state.showLabels;
+    },
   },
 });
 
-export const { setParams, setGrid } = gridSlice.actions;
+export const { setParams, setGrid, toggleShowLabels  } = gridSlice.actions;
 export default gridSlice.reducer;

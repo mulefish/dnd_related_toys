@@ -1,6 +1,6 @@
 import unittest
-from combatants import Elf, Orc, generate_elf_name, generate_orc_name
-from globals import ELF_FLAG, ORC_FLAG
+from .combatants import Elf, Orc, generate_elf_name, generate_orc_name
+from .globals import ELF_FLAG, ORC_FLAG
 
 class TestCombatants(unittest.TestCase):
 

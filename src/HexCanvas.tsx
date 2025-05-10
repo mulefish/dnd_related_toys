@@ -6,14 +6,15 @@ import './index.css';
 
 
 type HexCanvasProps = {
-  showLabels: boolean;
   width: number;
   height: number;
 };
 //const viewportWidth = 1000;
 // const viewportHeight = 1000;
 
-export default function HexCanvas({ showLabels, width, height }: HexCanvasProps): JSX.Element {
+export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Element {
+  const showLabels = useSelector((state: RootState) => state.grid.showLabels);
+
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const params = useSelector((state: RootState) => state.grid.params);
   const grid = useSelector((state: RootState) => state.grid.grid);

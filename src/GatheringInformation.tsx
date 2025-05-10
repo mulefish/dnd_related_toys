@@ -20,6 +20,11 @@ export default function GatheringInformation(): JSX.Element {
       <div style={{ marginTop: '10px', fontSize: '14px', color: '#888' }}>
         Elapsed time: {elapsed.toLocaleString()} ms
       </div>
+      {elapsed > 2000 && (
+        <h3 style={{ marginTop: '20px', color: '#aa0000' }}>
+          Is the server running?
+        </h3>
+      )}
     </div>
   );
 }

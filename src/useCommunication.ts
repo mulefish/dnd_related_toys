@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setParams, setGrid } from './store/gridSlice';
+import { setCreatures } from './store/creatureSlice';
 
 const SQRT3 = Math.sqrt(3);
 
@@ -29,28 +30,35 @@ export function useCommunication(
       };
     };
 
-    const fetchGrid = async () => {
+    const fetchGridAndCreatures = async () => {
       const dimensions = calcDimensions();
       dispatch(setParams(dimensions));
 
       try {
-        const response = await fetch('http://localhost:5000/grid-params', {
+        const gridResponse = await fetch('http://localhost:5000/grid-params', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ hexCols, hexRows }), // Only send what the server expects
+          body: JSON.stringify({ hexCols, hexRows }),
         });
 
-        if (!response.ok) {
-          throw new Error(`Server responded with ${response.status}`);
-        }
-
-        const grid = await response.json();
+        if (!gridResponse.ok) throw new Error('Failed to fetch grid');
+        const grid = await gridResponse.json();
         dispatch(setGrid(grid));
-      } catch (error) {
-        console.error('Error fetching grid:', error);
+      } catch (err) {
+        console.error('Grid fetch failed:', err);
+      }
+
+      try {
+        const creatureResponse = await fetch('http://localhost:5000/combatants');
+        if (!creatureResponse.ok) throw new Error('Failed to fetch creatures');
+        const creatures = await creatureResponse.json();
+        console.log( creatures)
+        dispatch(setCreatures(creatures));
+      } catch (err) {
+        console.error('Creature fetch failed:', err);
       }
     };
 
-    fetchGrid();
+    fetchGridAndCreatures();
   }, [viewportWidth, viewportHeight, hexCols, hexRows, dispatch]);
 }

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import HexCanvas from './HexCanvas';
 import { useCommunication } from './useCommunication';
-import GatheringInformation from './GatheringInformation';  // ✅
+import GatheringInformation from './GatheringInformation';
+import Information from './Information';
 import { useSelector } from 'react-redux';
 import { RootState } from './store/store';
 
@@ -14,9 +15,9 @@ export default function App() {
 
   const params = useSelector((state: RootState) => state.grid.params);
   const grid = useSelector((state: RootState) => state.grid.grid);
-  
+
   const isReady = params !== null && grid.length > 0;
-  
+
 
   const [viewportWidth, setViewportWidth] = useState<number>(
     window.innerWidth - SIDEBAR_WIDTH - VIEWPORT_MARGIN
@@ -40,13 +41,12 @@ export default function App() {
   return (
     <div style={{ display: 'flex' }}>
       <div style={{ width: `${SIDEBAR_WIDTH}px`, borderRight: '1px solid #ccc' }}>
-        <p>Sidebar Table</p>
+        <Information />
       </div>
-  
+
       <div className="hex-container">
         {isReady ? (
           <HexCanvas
-            showLabels={true}
             width={viewportWidth}
             height={viewportHeight}
           />

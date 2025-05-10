@@ -1,6 +1,6 @@
 import random
 from collections import defaultdict
-from globals import ELF_FLAG, ORC_FLAG, NULL  # These should be defined in a separate globals.py
+from .globals import ELF_FLAG, ORC_FLAG, NULL  # relative imports! I did not know about this. Duh.
 
 seen_names = defaultdict(int)
 
