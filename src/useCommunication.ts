@@ -1,11 +1,15 @@
-// src/hooks/useCommunication.tsx
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setParams, setGrid } from './store/gridSlice';
-import { useEffect } from 'react';
 
 const SQRT3 = Math.sqrt(3);
 
-export function useCommunication(viewportWidth: number, viewportHeight: number, hexCols: number, hexRows: number) {
+export function useCommunication(
+  viewportWidth: number,
+  viewportHeight: number,
+  hexCols: number,
+  hexRows: number
+) {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -29,12 +33,11 @@ export function useCommunication(viewportWidth: number, viewportHeight: number, 
       const dimensions = calcDimensions();
       dispatch(setParams(dimensions));
 
-
       try {
         const response = await fetch('http://localhost:5000/grid-params', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ hexCols, hexRows }),
+          body: JSON.stringify({ hexCols, hexRows }), // Only send what the server expects
         });
 
         if (!response.ok) {
@@ -43,7 +46,6 @@ export function useCommunication(viewportWidth: number, viewportHeight: number, 
 
         const grid = await response.json();
         dispatch(setGrid(grid));
-
       } catch (error) {
         console.error('Error fetching grid:', error);
       }

@@ -2,6 +2,8 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS # type: ignore
 from grid_generator import generate_hex_grid
+import traceback
+traceback.print_exc()
 
 app = Flask(__name__)
 CORS(app)
@@ -20,6 +22,7 @@ def calculate_grid():
 
     except Exception as e:
         print("Error processing request:", e)
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 400
 
 if __name__ == '__main__':

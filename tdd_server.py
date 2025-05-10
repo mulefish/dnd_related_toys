@@ -11,3 +11,5 @@ payload = {
 response = requests.post(url, json=payload)
 print("Status Code:", response.status_code)
 print("Response JSON:", response.json())
+print(f"URL={url}")
+print(f"payload=\n{payload}")

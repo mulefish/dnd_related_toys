@@ -5,7 +5,9 @@ import { useCommunication } from './useCommunication';
 export default function App() {
   const [showLabels, setShowLabels] = useState(false);
 
-  useCommunication(); // fire the network call on mount
+  // fire onMount!
+  useCommunication(1000, 1000, 30, 20);
+
 
   return (
     <div style={{ display: 'flex', height: '100vh', boxSizing: 'border-box' }}>
