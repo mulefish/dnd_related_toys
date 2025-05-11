@@ -237,6 +237,33 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
       drawCreature(ctx, x, y, species, name, hitpoints, damage);
     }
 
+    // Draw sight and movement range if activeCreature has showRange
+const activeCreature = creatures[activeIndex ?? -1];
+if (activeCreature?.showRange) {
+  const { col, row, sight, movement } = activeCreature;
+  const centerX = offsetX + col * horizSpacing + hexRadius;
+  const centerY = offsetY + row * vertSpacing + (col % 2 === 0 ? 0 : vertSpacing / 2);
+
+  // Sight range (blue)
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, sight, 0, 2 * Math.PI);
+  ctx.strokeStyle = 'rgba(0, 128, 255, 0.4)';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([5, 5]);
+  ctx.stroke();
+
+  // Movement range (green)
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, movement, 0, 2 * Math.PI);
+  ctx.strokeStyle = 'rgba(0, 200, 0, 0.3)';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([2, 3]);
+  ctx.stroke();
+
+  ctx.setLineDash([]); // Reset dash style
+}
+
+
     if (mousePos) {
       const nearest = findNearestCreature(mousePos.x, mousePos.y);
       if (nearest) {
@@ -248,6 +275,8 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
         ctx.stroke();
       }
     }
+
+    
   }, [params, grid, showLabels, creatures, activeIndex, width, height, mousePos]);
 
   return <canvas ref={canvasRef} />;

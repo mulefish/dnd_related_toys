@@ -8,6 +8,7 @@ type Creature = {
   angle: number;
   cost: number;
   [key: string]: any;
+  showRange?: boolean;
 };
 
 type CreatureState = {
@@ -40,9 +41,15 @@ export const creatureSlice = createSlice({
     },
     setActiveCreature(state, action: PayloadAction<number>) {
       state.activeIndex = action.payload;
+    },
+    toggleRangeForActive(state) {
+      const i = state.activeIndex;
+      if (i != null && state.creatures[i]) {
+        state.creatures[i].showRange = !state.creatures[i].showRange;
+      }
     }
   },
 });
 
-export const { setCreatures, nextCreature, updateCreatures, setActiveCreature } = creatureSlice.actions;
+export const { setCreatures, nextCreature, updateCreatures, setActiveCreature,toggleRangeForActive } = creatureSlice.actions;
 export default creatureSlice.reducer;

@@ -4,12 +4,15 @@ import { nextCreature } from './store/creatureSlice';
 import './index.css';
 import { useCommunication } from './useCommunication';
 import { toggleShowLabels } from './store/gridSlice';
+import { toggleRangeForActive } from './store/creatureSlice';
+
 
 export default function Information() {
   const dispatch = useDispatch();
   const creatures = useSelector((state: RootState) => state.creatures.creatures);
   const activeIndex = useSelector((state: RootState) => state.creatures.activeIndex);
   const showLabels = useSelector((state: RootState) => state.grid.showLabels);
+  
   const { moveActiveCreature } = useCommunication(0, 0);
 
   const activeCreature = activeIndex != null ? creatures[activeIndex] : null;
@@ -24,6 +27,9 @@ export default function Information() {
         <button onClick={() => dispatch(toggleShowLabels())}>
           {showLabels ? 'Hide Labels' : 'Show Labels'}
         </button>
+ <button onClick={() => dispatch(toggleRangeForActive())}>
+  {activeCreature?.showRange ? 'Hide Range' : 'Show Range'}
+</button>
       </div>
 
       {activeCreature ? (
