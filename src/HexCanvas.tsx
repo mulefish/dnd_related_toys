@@ -38,17 +38,17 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
       setMousePos(null);
     };
 
-const handleClick = (e: MouseEvent) => {
-  const rect = canvas.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
+    const handleClick = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
 
-  const nearest = findNearestCreature(x, y);
-  if (nearest?.creature) {
-    console.log('Clicked creature:', nearest.creature);
-    dispatch(setActiveCreature(nearest.index));
-  }
-};
+      const nearest = findNearestCreature(x, y);
+      if (nearest?.creature) {
+        console.log('Clicked creature:', nearest.creature);
+        dispatch(setActiveCreature(nearest.index));
+      }
+    };
 
     canvas.addEventListener('mousemove', handleMouseMove);
     canvas.addEventListener('mouseleave', handleMouseLeave);
@@ -181,6 +181,8 @@ const handleClick = (e: MouseEvent) => {
       }
     }
 
+
+
     function drawGrid(ctx: CanvasRenderingContext2D) {
       for (const row of grid) {
         for (const tile of row) {
@@ -204,6 +206,29 @@ const handleClick = (e: MouseEvent) => {
     }
 
     drawGrid(ctx);
+
+    // Draw lines from creatures to their targets
+    for (const creature of creatures) {
+      if (creature.target !== null && creature.target >= 0 && creature.target < creatures.length) {
+        const target = creatures[creature.target];
+
+        const x1 = offsetX + creature.col * horizSpacing + hexRadius;
+        const y1 = offsetY + creature.row * vertSpacing + (creature.col % 2 === 0 ? 0 : vertSpacing / 2);
+        const x2 = offsetX + target.col * horizSpacing + hexRadius;
+        const y2 = offsetY + target.row * vertSpacing + (target.col % 2 === 0 ? 0 : vertSpacing / 2);
+
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.strokeStyle = 'rgba(0, 0, 255, 0.5)';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 2]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+    }
+
+
 
     for (const creature of creatures) {
       const { col, row, species, name, hitpoints, damage } = creature;

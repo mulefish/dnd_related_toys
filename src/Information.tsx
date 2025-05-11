@@ -4,37 +4,43 @@ import { nextCreature } from './store/creatureSlice';
 import './index.css';
 import { useCommunication } from './useCommunication';
 import { toggleShowLabels } from './store/gridSlice';
-import { useEffect } from 'react';
 
 export default function Information() {
   const dispatch = useDispatch();
   const creatures = useSelector((state: RootState) => state.creatures.creatures);
   const activeIndex = useSelector((state: RootState) => state.creatures.activeIndex);
   const showLabels = useSelector((state: RootState) => state.grid.showLabels);
+  const { moveActiveCreature } = useCommunication(0, 0);
 
-
-  // get moveActiveCreature method from communication hook
-  const { moveActiveCreature } = useCommunication(0, 0); // dimensions aren't needed for movement
-
-    useEffect(() => {
-      if ( activeIndex != null ) {
-        const creature = creatures[activeIndex]
-        console.log("%c activeIndex=" + activeIndex + "\n" + JSON.stringify(creature,null,2), "background-color:lightgreen")
-      }
-    }, [activeIndex])
+  const activeCreature = activeIndex != null ? creatures[activeIndex] : null;
 
   return (
     <div className="creature-list">
-      <h3></h3>
-      <button onClick={() => dispatch(nextCreature())}>
-        Next Creature
-      </button>
-      <button onClick={moveActiveCreature} style={{ marginLeft: '10px' }}>
-        Move Active Creature
-      </button>
-      <button onClick={() => dispatch(toggleShowLabels())}>
-        {showLabels ? 'Hide' : 'Show'}
-      </button>
+      <h3>Creatures</h3>
+
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '10px' }}>
+        <button onClick={() => dispatch(nextCreature())}>Next Creature</button>
+        <button onClick={moveActiveCreature}>Move Active Creature</button>
+        <button onClick={() => dispatch(toggleShowLabels())}>
+          {showLabels ? 'Hide Labels' : 'Show Labels'}
+        </button>
+      </div>
+
+      {activeCreature ? (
+        <div className="creature-details" style={{ marginBottom: '1em', fontSize: '0.9em' }}>
+          <h4>Details</h4>
+          <ul style={{ paddingLeft: '1em' }}>
+            {Object.entries(activeCreature).map(([key, value]) => (
+              <li key={key}>
+                <strong>{key}:</strong> {String(value)}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <p style={{ fontStyle: 'italic', color: '#888' }}>No creature selected</p>
+      )}
+
       {creatures.length === 0 ? (
         <p style={{ fontStyle: 'italic', color: '#888' }}>No creatures loaded...</p>
       ) : (
