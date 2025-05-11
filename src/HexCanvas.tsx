@@ -186,14 +186,14 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
     function drawGrid(ctx: CanvasRenderingContext2D) {
       for (const row of grid) {
         for (const tile of row) {
-          const { col, row: r, cost } = tile;
+          const { col, row: r, cost, isDifficult } = tile;
           const x = offsetX + col * horizSpacing + hexRadius;
           const y =
             offsetY +
             r * vertSpacing +
             (col % 2 === 0 ? 0 : vertSpacing / 2);
 
-          let color = cost === 30 ? '#e0e0e0' : '#ffffff';
+          let color = isDifficult === true ? '#e0e0e0' : '#ffffff';
           const activeCreature = creatures[activeIndex ?? -1];
           if (activeCreature && activeCreature.row === r && activeCreature.col === col) {
             color = 'yellow';

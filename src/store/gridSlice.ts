@@ -14,6 +14,7 @@ type HexTile = {
   row: number;
   col: number;
   cost: number;
+  isDifficult: boolean;
 };
 
 type GridState = {

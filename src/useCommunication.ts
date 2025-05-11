@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setParams, setGrid } from './store/gridSlice';
 import { setCreatures, updateCreatures } from './store/creatureSlice';
 import { RootState } from './store/store';
-
+import { logPink } from './common'; 
 const SQRT3 = Math.sqrt(3);
 
 export function useCommunication(viewportWidth: number, viewportHeight: number) {
@@ -39,7 +39,7 @@ export function useCommunication(viewportWidth: number, viewportHeight: number) 
           offsetX: 0,
           offsetY: 20,
         };
-
+        
         dispatch(setParams(dimensions));
         dispatch(setGrid(grid));
         setDimensionsFetched(true);
