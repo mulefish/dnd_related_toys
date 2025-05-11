@@ -150,13 +150,14 @@ const handleClick = (e: MouseEvent) => {
       const hpRatio = Math.min(1, remainingHP / hitpoints);
       const lineWidth = maxLineWidth * hpRatio;
 
-      ctx.fillStyle = '#bbb';
+      ctx.fillStyle = '#000';
       ctx.font = '10px sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'bottom';
       ctx.fillText(name, x, y - size / 1.2);
 
       ctx.beginPath();
+      // ctx.strokeStyle = hpRatio > 0.6 ? '#44aa44' : hpRatio > 0.3 ? '#ffaa00' : '#cc2222';
       ctx.strokeStyle = hpRatio > 0.6 ? '#44aa44' : hpRatio > 0.3 ? '#ffaa00' : '#cc2222';
       ctx.lineWidth = 3;
       const lineY = y - size * 0.8;

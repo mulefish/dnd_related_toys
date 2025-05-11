@@ -4,6 +4,7 @@ import { nextCreature } from './store/creatureSlice';
 import './index.css';
 import { useCommunication } from './useCommunication';
 import { toggleShowLabels } from './store/gridSlice';
+import { useEffect } from 'react';
 
 export default function Information() {
   const dispatch = useDispatch();
@@ -15,9 +16,16 @@ export default function Information() {
   // get moveActiveCreature method from communication hook
   const { moveActiveCreature } = useCommunication(0, 0); // dimensions aren't needed for movement
 
+    useEffect(() => {
+      if ( activeIndex != null ) {
+        const creature = creatures[activeIndex]
+        console.log("%c activeIndex=" + activeIndex + "\n" + JSON.stringify(creature,null,2), "background-color:lightgreen")
+      }
+    }, [activeIndex])
+
   return (
     <div className="creature-list">
-      <h3>{activeIndex}</h3>
+      <h3></h3>
       <button onClick={() => dispatch(nextCreature())}>
         Next Creature
       </button>
