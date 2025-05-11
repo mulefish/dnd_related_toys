@@ -20,6 +20,7 @@ const initialState: CreatureState = {
   activeIndex: null,
 };
 
+
 export const creatureSlice = createSlice({
   name: 'creatures',
   initialState,
@@ -34,8 +35,14 @@ export const creatureSlice = createSlice({
         ? 0
         : (state.activeIndex + 1) % state.creatures.length;
     },
+    updateCreatures(state, action: PayloadAction<Creature[]>) {
+      state.creatures = action.payload;
+    },
+    setActiveCreature(state, action: PayloadAction<number>) {
+      state.activeIndex = action.payload;
+    }
   },
 });
 
-export const { setCreatures, nextCreature } = creatureSlice.actions;
+export const { setCreatures, nextCreature, updateCreatures, setActiveCreature } = creatureSlice.actions;
 export default creatureSlice.reducer;

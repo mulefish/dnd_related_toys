@@ -1,7 +1,10 @@
-import { useRef, useEffect, JSX } from 'react';
-import { useSelector } from 'react-redux';
+import { useRef, useEffect, useState, JSX } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from './store/store';
 import './index.css';
+import { } from 'react-redux';
+import { setActiveCreature } from './store/creatureSlice';
+
 
 type HexCanvasProps = {
   width: number;
@@ -15,6 +18,71 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
   const grid = useSelector((state: RootState) => state.grid.grid);
   const creatures = useSelector((state: RootState) => state.creatures.creatures);
   const activeIndex = useSelector((state: RootState) => state.creatures.activeIndex);
+  const dispatch = useDispatch();
+
+  const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || !params) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      setMousePos({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      });
+    };
+
+    const handleMouseLeave = () => {
+      setMousePos(null);
+    };
+
+const handleClick = (e: MouseEvent) => {
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  const nearest = findNearestCreature(x, y);
+  if (nearest?.creature) {
+    console.log('Clicked creature:', nearest.creature);
+    dispatch(setActiveCreature(nearest.index));
+  }
+};
+
+    canvas.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('mouseleave', handleMouseLeave);
+    canvas.addEventListener('click', handleClick);
+
+    return () => {
+      canvas.removeEventListener('mousemove', handleMouseMove);
+      canvas.removeEventListener('mouseleave', handleMouseLeave);
+      canvas.removeEventListener('click', handleClick);
+    };
+  }, [params, creatures]);
+
+  function findNearestCreature(x: number, y: number) {
+    let nearest = null;
+    let minDist = Infinity;
+
+    for (let i = 0; i < creatures.length; i++) {
+      const c = creatures[i];
+      const cx = params!.offsetX + c.col * params!.horizSpacing + params!.hexRadius;
+      const cy =
+        params!.offsetY +
+        c.row * params!.vertSpacing +
+        (c.col % 2 === 0 ? 0 : params!.vertSpacing / 2);
+      const dx = x - cx;
+      const dy = y - cy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < minDist) {
+        minDist = dist;
+        nearest = { x: cx, y: cy, creature: c, index: i };
+      }
+    }
+
+    return nearest;
+  }
 
   useEffect(() => {
     if (!params || grid.length === 0) return;
@@ -59,14 +127,13 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
       ctx.stroke();
 
       if (showLabels && label) {
-        ctx.fillStyle = '#333';
+        ctx.fillStyle = '#ff0000';
         ctx.font = '10px sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(label, x, y);
       }
     }
-
 
     function drawCreature(
       ctx: CanvasRenderingContext2D,
@@ -83,14 +150,12 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
       const hpRatio = Math.min(1, remainingHP / hitpoints);
       const lineWidth = maxLineWidth * hpRatio;
 
-      // Draw name above creature
       ctx.fillStyle = '#bbb';
       ctx.font = '10px sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'bottom';
       ctx.fillText(name, x, y - size / 1.2);
 
-      // Draw health bar under name
       ctx.beginPath();
       ctx.strokeStyle = hpRatio > 0.6 ? '#44aa44' : hpRatio > 0.3 ? '#ffaa00' : '#cc2222';
       ctx.lineWidth = 3;
@@ -99,46 +164,39 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
       ctx.lineTo(x + lineWidth / 2, lineY);
       ctx.stroke();
 
-      // Draw creature body
       if (type === 'ELF') {
         ctx.beginPath();
         ctx.arc(x, y, size / 2, 0, 2 * Math.PI);
-        ctx.fillStyle = '#90ee90'; // light green
+        ctx.fillStyle = '#90ee90';
         ctx.fill();
-        ctx.strokeStyle = '#006400'; // dark green border
+        ctx.strokeStyle = '#006400';
         ctx.stroke();
       } else if (type === 'ORC') {
         ctx.beginPath();
         ctx.fillStyle = 'orange';
         ctx.fillRect(x - size / 2, y - size / 2, size, size);
-        ctx.strokeStyle = '#8b4513'; // dark brown border
+        ctx.strokeStyle = '#8b4513';
         ctx.strokeRect(x - size / 2, y - size / 2, size, size);
       }
     }
 
-
-
     function drawGrid(ctx: CanvasRenderingContext2D) {
-      ctx.clearRect(0, 0, width, height);
-
       for (const row of grid) {
         for (const tile of row) {
           const { col, row: r, cost } = tile;
           const x = offsetX + col * horizSpacing + hexRadius;
           const y =
             offsetY +
-            r * vertSpacing + 
+            r * vertSpacing +
             (col % 2 === 0 ? 0 : vertSpacing / 2);
 
-          // const color = cost === 30 ? '#e0e0e0' : '#ffffff';
           let color = cost === 30 ? '#e0e0e0' : '#ffffff';
           const activeCreature = creatures[activeIndex ?? -1];
           if (activeCreature && activeCreature.row === r && activeCreature.col === col) {
             color = 'yellow';
           }
 
-          const label = showLabels ? `${col},${r}` : '';
-
+          const label = showLabels ? `${col} ${r} ${cost}` : '';
           drawHex(ctx, x, y, hexRadius - 0.5, color, label);
         }
       }
@@ -152,7 +210,19 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
       const y = offsetY + row * vertSpacing + (col % 2 === 0 ? 0 : vertSpacing / 2);
       drawCreature(ctx, x, y, species, name, hitpoints, damage);
     }
-  }, [params, grid, showLabels, creatures, activeIndex, width, height, ]);
+
+    if (mousePos) {
+      const nearest = findNearestCreature(mousePos.x, mousePos.y);
+      if (nearest) {
+        ctx.beginPath();
+        ctx.moveTo(mousePos.x, mousePos.y);
+        ctx.lineTo(nearest.x, nearest.y);
+        ctx.strokeStyle = '#ff6633';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+    }
+  }, [params, grid, showLabels, creatures, activeIndex, width, height, mousePos]);
 
   return <canvas ref={canvasRef} />;
 }

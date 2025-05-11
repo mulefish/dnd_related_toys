@@ -2,19 +2,31 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from './store/store';
 import { nextCreature } from './store/creatureSlice';
 import './index.css';
+import { useCommunication } from './useCommunication';
+import { toggleShowLabels } from './store/gridSlice';
 
 export default function Information() {
   const dispatch = useDispatch();
   const creatures = useSelector((state: RootState) => state.creatures.creatures);
   const activeIndex = useSelector((state: RootState) => state.creatures.activeIndex);
+  const showLabels = useSelector((state: RootState) => state.grid.showLabels);
+
+
+  // get moveActiveCreature method from communication hook
+  const { moveActiveCreature } = useCommunication(0, 0); // dimensions aren't needed for movement
 
   return (
     <div className="creature-list">
-      <h3>Creatures</h3>
+      <h3>{activeIndex}</h3>
       <button onClick={() => dispatch(nextCreature())}>
         Next Creature
       </button>
-
+      <button onClick={moveActiveCreature} style={{ marginLeft: '10px' }}>
+        Move Active Creature
+      </button>
+      <button onClick={() => dispatch(toggleShowLabels())}>
+        {showLabels ? 'Hide' : 'Show'}
+      </button>
       {creatures.length === 0 ? (
         <p style={{ fontStyle: 'italic', color: '#888' }}>No creatures loaded...</p>
       ) : (

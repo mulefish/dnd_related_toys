@@ -6,7 +6,7 @@ import creatureReducer from './creatureSlice';
 export const store = configureStore({
   reducer: {
     grid: gridReducer,
-     creatures: creatureReducer
+    creatures: creatureReducer
   },
 });
 

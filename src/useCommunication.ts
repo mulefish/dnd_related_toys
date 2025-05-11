@@ -1,32 +1,31 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setParams, setGrid } from './store/gridSlice';
-import { setCreatures } from './store/creatureSlice';
+import { setCreatures, updateCreatures } from './store/creatureSlice';
+import { RootState } from './store/store';
 
 const SQRT3 = Math.sqrt(3);
 
 export function useCommunication(viewportWidth: number, viewportHeight: number) {
   const dispatch = useDispatch();
   const [dimensionsFetched, setDimensionsFetched] = useState(false);
+  const activeIndex = useSelector((state: RootState) => state.creatures.activeIndex);
 
   useEffect(() => {
     const fetchGridAndCreatures = async () => {
       try {
-        // Step 1: Fetch grid from backend, which now includes hexRows and hexCols internally
         const gridResponse = await fetch('http://localhost:5000/grid-params', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({}) // no hexRows/Cols passed — server uses globals
+          body: JSON.stringify({})
         });
 
         if (!gridResponse.ok) throw new Error('Failed to fetch grid');
         const grid = await gridResponse.json();
 
-        // Derive hexRows and hexCols from the returned grid
         const hexRows = grid.length;
         const hexCols = grid[0]?.length || 0;
 
-        // Step 2: Compute dimensions using real values from backend
         const maxRadiusX = viewportWidth / (((hexCols - 1) * 3) / 2 + 2);
         const maxRadiusY = viewportHeight / ((hexRows - 1) * SQRT3 + 1);
         const hexRadius = Math.min(maxRadiusX, maxRadiusY);
@@ -60,4 +59,24 @@ export function useCommunication(viewportWidth: number, viewportHeight: number) 
 
     fetchGridAndCreatures();
   }, [viewportWidth, viewportHeight, dispatch]);
+
+  const moveActiveCreature = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/makeTheNextCreatureMove', {
+        method: 'POST',
+          body: JSON.stringify({ activeIndex }),
+      });
+
+      if (!response.ok) throw new Error('Failed to move creature');
+
+      const updatedCreatures = await response.json();
+      dispatch(updateCreatures(updatedCreatures));
+
+    } catch (err) {
+      console.error('Movement error:', err);
+    }
+  };
+
+  return { moveActiveCreature, dimensionsFetched, updateCreatures };
 }
+

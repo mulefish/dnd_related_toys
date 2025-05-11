@@ -25,7 +25,7 @@ class CreatureGenerator:
         combatants = []
 
         # Define left, middle, right column ranges
-        gap_size = max(2, COLS // 6)
+        # gap_size = max(2, COLS // 6)
         third = COLS // 3
         elf_col_range = (0, third - 1)
         orc_col_range = (COLS - third, COLS - 1)

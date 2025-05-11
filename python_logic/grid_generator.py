@@ -1,11 +1,12 @@
-# python_logic/grid_generator.py
 import math
 import random
 from python_logic.globals import ROWS, COLS  # Import shared dimensions
 
 def generate_hex_grid(base_prob=0.05, neighbor_boost=0.3):
+    low = 1
+    high = 3
     hexRows, hexCols = ROWS, COLS
-    grid = [[{'row': r, 'col': c, 'cost': 0} for c in range(hexCols)] for r in range(hexRows)]
+    grid = [[{'row': r, 'col': c, 'cost': low} for c in range(hexCols)] for r in range(hexRows)]
 
     def get_neighbors(r, c):
         directions_even = [(-1, 0), (-1, +1), (0, -1), (0, +1), (+1, 0), (+1, +1)]
@@ -18,18 +19,18 @@ def generate_hex_grid(base_prob=0.05, neighbor_boost=0.3):
                 neighbors.append((nr, nc))
         return neighbors
 
-    # First pass: base chance
+    # First pass: randomly assign high-cost tiles
     for r in range(hexRows):
         for c in range(hexCols):
             if random.random() < base_prob:
-                grid[r][c]['cost'] = 30
+                grid[r][c]['cost'] = high
 
-    # Second pass: boost neighbors
+    # Second pass: increase chance around existing high-cost tiles
     for r in range(hexRows):
         for c in range(hexCols):
-            if grid[r][c]['cost'] == 30:
+            if grid[r][c]['cost'] == high:
                 for nr, nc in get_neighbors(r, c):
-                    if grid[nr][nc]['cost'] == 0 and random.random() < neighbor_boost:
-                        grid[nr][nc]['cost'] = 30
+                    if grid[nr][nc]['cost'] == low and random.random() < neighbor_boost:
+                        grid[nr][nc]['cost'] = high
 
     return grid
