@@ -1,0 +1,31 @@
+canvas {
+  background-color: #fff;
+}
+
+.hex-container {
+  /* border: 2px solid #444; */
+  margin: 12px;
+  padding: 4px;
+  background-color: #fafafa;
+}
+
+.creature-list {
+  padding: 10px;
+  font-family: sans-serif;
+}
+
+.creature-card {
+  padding: 8px;
+  margin: 6px 0;
+  border-radius: 6px;
+  line-height: 1.4;
+  font-size: 14px;
+}
+
+.orc {
+  background-color: #dddddd;
+}
+
+.elf {
+  background-color: #d5f5dc;
+}

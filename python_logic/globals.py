@@ -1,0 +1,5 @@
+ELF_FLAG = "ELF"
+ORC_FLAG = "ORC"
+NULL = None
+ROWS=20
+COLS=30

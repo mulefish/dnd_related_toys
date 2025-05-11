@@ -1,22 +1,16 @@
-# dnd_related_toys
-https://github.com/mulefish/dnd_related_toys/
+# git url
 
-# Dependancies: 
-node + express
+# What is this?
+It is a AI toy for me too play with  reenforcenent learning.
+The logic will be in the python and the react will simply display python's opinions
 
-# DONE 1:
-Orc and Elf creation
-# DONE 2:
-Viewport 
+# react dependencies
+typescript  
+vite  
+eslite  
+types
 
-# TODO 1: 
-Game mechanics (hitbox? range attack? other? How to move? etc)
-# TODO 2: 
-AI
-# TODO 3: 
-Genetic algo
-
-# Screenshot:
-![Screenshot](./Screenshot_2025-05-04_114045.png)
-
-
+# python dependencies
+flask_cors
+scikit
+pandas
