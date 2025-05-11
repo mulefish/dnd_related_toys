@@ -21,8 +21,15 @@ def generate_hex_grid(base_prob=0.05, neighbor_boost=0.3):
     
     # First and Second pass are to create little islands of difficultly
     # First pass: set seeds!
+    middleRow = hexRows // 2 
+    middleCol = hexCols // 2
     for r in range(hexRows):
         for c in range(hexCols):
+            if ( r == middleRow and c == middleCol ):
+                grid[r][c]['isGoal'] = True
+            else:
+                grid[r][c]['isGoal'] = False
+
             if random.random() < base_prob:
                 grid[r][c]['cost'] = high
                 grid[r][c]['isDifficult'] = True
