@@ -44,7 +44,15 @@ def move_creature_randomly(creatures, grid, active_index):
     if not targets:
         return creatures
 
-    targets.sort(key=lambda t: t[0])
+    # CLEVER logic
+    clever_roll = random.randint(0, 100)
+    if clever_roll <= creature.get("clever", 0):
+        # Target the weakest enemy
+        targets.sort(key=lambda t: (t[2].get("hitpoints", 0) - t[2].get("damage", 0)))
+    else:
+        # Target the closest enemy
+        targets.sort(key=lambda t: t[0])
+
     closest_dist, target_index, target = targets[0]
 
     creature["target"] = target_index
@@ -59,7 +67,8 @@ def move_creature_randomly(creatures, grid, active_index):
     directions_even = [(-1, 0), (-1, +1), (0, -1), (0, +1), (+1, 0), (+1, +1)]
     directions_odd = [(-1, -1), (-1, 0), (0, -1), (0, +1), (+1, -1), (+1, 0)]
     temp_movement = creature["movement"]
-    while  temp_movement > 0:
+
+    while temp_movement > 0:
         current_row, current_col = creature["row"], creature["col"]
         best_move = None
         best_dist = distance_to_target(current_row, current_col)
@@ -81,8 +90,6 @@ def move_creature_randomly(creatures, grid, active_index):
             creature["col"] = nc
             temp_movement -= cost
         else:
-            # no more movement for creature!
             break
-
 
     return creatures

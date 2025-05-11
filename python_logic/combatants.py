@@ -32,7 +32,7 @@ def generate_orc_name():
 
 
 def assign_points(creature, total_points):
-    attributes = ["self_preservation", "attack", "hitpoints", "movement", "initiative"]
+    attributes = ["self_preservation", "attack", "hitpoints", "movement", "initiative","clever"]
     remaining_points = total_points
 
     for attr in attributes:
@@ -48,7 +48,8 @@ def assign_points(creature, total_points):
         current = getattr(creature, attr)
         setattr(creature, attr, min(100, current + bonus))
         remaining_points -= bonus
-
+    creature.movement += 20
+    creature.clever = 100
     creature.sight = creature.movement + int(creature.movement * 0.5)
 
 
@@ -56,6 +57,7 @@ class Creature:
     def __init__(self, total_points):
         self.name = NULL
         self.self_preservation = 0
+        self.clever = 0 
         self.goal_driven = 50
         self.attack = 0
         self.hitpoints = 0
