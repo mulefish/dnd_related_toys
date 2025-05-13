@@ -61,28 +61,28 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
     };
   }, [params, creatures]);
 
-  function findNearestCreature(x: number, y: number) {
-    let nearest = null;
-    let minDist = Infinity;
+  // function findNearestCreature(x: number, y: number) {
+  //   let nearest = null;
+  //   let minDist = Infinity;
 
-    for (let i = 0; i < creatures.length; i++) {
-      const c = creatures[i];
-      const cx = params!.offsetX + c.col * params!.horizSpacing + params!.hexRadius;
-      const cy =
-        params!.offsetY +
-        c.row * params!.vertSpacing +
-        (c.col % 2 === 0 ? 0 : params!.vertSpacing / 2);
-      const dx = x - cx;
-      const dy = y - cy;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < minDist) {
-        minDist = dist;
-        nearest = { x: cx, y: cy, creature: c, index: i };
-      }
-    }
+  //   for (let i = 0; i < creatures.length; i++) {
+  //     const c = creatures[i];
+  //     const cx = params!.offsetX + c.col * params!.horizSpacing + params!.hexRadius;
+  //     const cy =
+  //       params!.offsetY +
+  //       c.row * params!.vertSpacing +
+  //       (c.col % 2 === 0 ? 0 : params!.vertSpacing / 2);
+  //     const dx = x - cx;
+  //     const dy = y - cy;
+  //     const dist = Math.sqrt(dx * dx + dy * dy);
+  //     if (dist < minDist) {
+  //       minDist = dist;
+  //       nearest = { x: cx, y: cy, creature: c, index: i };
+  //     }
+  //   }
 
-    return nearest;
-  }
+  //   return nearest;
+  // }
 
   useEffect(() => {
     if (!params || grid.length === 0) return;
@@ -135,51 +135,51 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
       }
     }
 
-    function drawCreature(
-      ctx: CanvasRenderingContext2D,
-      x: number,
-      y: number,
-      type: string,
-      name: string,
-      hitpoints: number,
-      damage: number
-    ) {
-      const size = hexRadius * 0.8;
-      const remainingHP = Math.max(hitpoints - damage, 0);
-      const maxLineWidth = size;
-      const hpRatio = Math.min(1, remainingHP / hitpoints);
-      const lineWidth = maxLineWidth * hpRatio;
+    // function drawCreature(
+    //   ctx: CanvasRenderingContext2D,
+    //   x: number,
+    //   y: number,
+    //   type: string,
+    //   name: string,
+    //   hitpoints: number,
+    //   damage: number
+    // ) {
+    //   const size = hexRadius * 0.8;
+    //   const remainingHP = Math.max(hitpoints - damage, 0);
+    //   const maxLineWidth = size;
+    //   const hpRatio = Math.min(1, remainingHP / hitpoints);
+    //   const lineWidth = maxLineWidth * hpRatio;
 
-      ctx.fillStyle = '#000';
-      ctx.font = '10px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'bottom';
-      ctx.fillText(name, x, y - size / 1.2);
+    //   ctx.fillStyle = '#000';
+    //   ctx.font = '10px sans-serif';
+    //   ctx.textAlign = 'center';
+    //   ctx.textBaseline = 'bottom';
+    //   ctx.fillText(name, x, y - size / 1.2);
 
-      ctx.beginPath();
-      // ctx.strokeStyle = hpRatio > 0.6 ? '#44aa44' : hpRatio > 0.3 ? '#ffaa00' : '#cc2222';
-      ctx.strokeStyle = hpRatio > 0.6 ? '#44aa44' : hpRatio > 0.3 ? '#ffaa00' : '#cc2222';
-      ctx.lineWidth = 3;
-      const lineY = y - size * 0.8;
-      ctx.moveTo(x - lineWidth / 2, lineY);
-      ctx.lineTo(x + lineWidth / 2, lineY);
-      ctx.stroke();
+    //   ctx.beginPath();
+    //   // ctx.strokeStyle = hpRatio > 0.6 ? '#44aa44' : hpRatio > 0.3 ? '#ffaa00' : '#cc2222';
+    //   ctx.strokeStyle = hpRatio > 0.6 ? '#44aa44' : hpRatio > 0.3 ? '#ffaa00' : '#cc2222';
+    //   ctx.lineWidth = 3;
+    //   const lineY = y - size * 0.8;
+    //   ctx.moveTo(x - lineWidth / 2, lineY);
+    //   ctx.lineTo(x + lineWidth / 2, lineY);
+    //   ctx.stroke();
 
-      if (type === 'ELF') {
-        ctx.beginPath();
-        ctx.arc(x, y, size / 2, 0, 2 * Math.PI);
-        ctx.fillStyle = '#90ee90';
-        ctx.fill();
-        ctx.strokeStyle = '#006400';
-        ctx.stroke();
-      } else if (type === 'ORC') {
-        ctx.beginPath();
-        ctx.fillStyle = 'orange';
-        ctx.fillRect(x - size / 2, y - size / 2, size, size);
-        ctx.strokeStyle = '#8b4513';
-        ctx.strokeRect(x - size / 2, y - size / 2, size, size);
-      }
-    }
+    //   if (type === 'ELF') {
+    //     ctx.beginPath();
+    //     ctx.arc(x, y, size / 2, 0, 2 * Math.PI);
+    //     ctx.fillStyle = '#90ee90';
+    //     ctx.fill();
+    //     ctx.strokeStyle = '#006400';
+    //     ctx.stroke();
+    //   } else if (type === 'ORC') {
+    //     ctx.beginPath();
+    //     ctx.fillStyle = 'orange';
+    //     ctx.fillRect(x - size / 2, y - size / 2, size, size);
+    //     ctx.strokeStyle = '#8b4513';
+    //     ctx.strokeRect(x - size / 2, y - size / 2, size, size);
+    //   }
+    // }
 
 
 
@@ -194,13 +194,13 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
             (col % 2 === 0 ? 0 : vertSpacing / 2);
 
           let color = isDifficult === true ? '#e0e0e0' : '#ffffff';
-          const activeCreature = creatures[activeIndex ?? -1];
-          if (activeCreature && activeCreature.row === r && activeCreature.col === col) {
-            color = 'yellow';
-          }
-          if ( isGoal === true ) {
-            color = '#0000ff'
-          }
+          // const activeCreature = creatures[activeIndex ?? -1];
+          // if (activeCreature && activeCreature.row === r && activeCreature.col === col) {
+          //   color = 'yellow';
+          // }
+          // if ( isGoal === true ) {
+          //   color = '#0000ff'
+          // }
 
           const label = showLabels ? `${col} ${r} ${cost}` : '';
           drawHex(ctx, x, y, hexRadius - 0.5, color, label);
@@ -210,74 +210,74 @@ export default function HexCanvas({ width, height }: HexCanvasProps): JSX.Elemen
 
     drawGrid(ctx);
 
-    // Draw lines from creatures to their targets
-    for (const creature of creatures) {
-      if (creature.target !== null && creature.target >= 0 && creature.target < creatures.length) {
-        const target = creatures[creature.target];
+    // // Draw lines from creatures to their targets
+    // for (const creature of creatures) {
+    //   if (creature.target !== null && creature.target >= 0 && creature.target < creatures.length) {
+    //     const target = creatures[creature.target];
 
-        const x1 = offsetX + creature.col * horizSpacing + hexRadius;
-        const y1 = offsetY + creature.row * vertSpacing + (creature.col % 2 === 0 ? 0 : vertSpacing / 2);
-        const x2 = offsetX + target.col * horizSpacing + hexRadius;
-        const y2 = offsetY + target.row * vertSpacing + (target.col % 2 === 0 ? 0 : vertSpacing / 2);
+    //     const x1 = offsetX + creature.col * horizSpacing + hexRadius;
+    //     const y1 = offsetY + creature.row * vertSpacing + (creature.col % 2 === 0 ? 0 : vertSpacing / 2);
+    //     const x2 = offsetX + target.col * horizSpacing + hexRadius;
+    //     const y2 = offsetY + target.row * vertSpacing + (target.col % 2 === 0 ? 0 : vertSpacing / 2);
 
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.strokeStyle = 'rgba(0, 0, 255, 0.5)';
-        ctx.lineWidth = 2;
-        ctx.setLineDash([4, 2]);
-        ctx.stroke();
-        ctx.setLineDash([]);
-      }
-    }
-
-
-
-    for (const creature of creatures) {
-      const { col, row, species, name, hitpoints, damage } = creature;
-      const x = offsetX + col * horizSpacing + hexRadius;
-      const y = offsetY + row * vertSpacing + (col % 2 === 0 ? 0 : vertSpacing / 2);
-      drawCreature(ctx, x, y, species, name, hitpoints, damage);
-    }
-
-    // Draw sight and movement range if activeCreature has showRange
-const activeCreature = creatures[activeIndex ?? -1];
-if (activeCreature?.showRange) {
-  const { col, row, sight, movement } = activeCreature;
-  const centerX = offsetX + col * horizSpacing + hexRadius;
-  const centerY = offsetY + row * vertSpacing + (col % 2 === 0 ? 0 : vertSpacing / 2);
-
-  // Sight range (blue)
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, sight, 0, 2 * Math.PI);
-  ctx.strokeStyle = 'rgba(0, 128, 255, 0.4)';
-  ctx.lineWidth = 2;
-  ctx.setLineDash([5, 5]);
-  ctx.stroke();
-
-  // Movement range (green)
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, movement, 0, 2 * Math.PI);
-  ctx.strokeStyle = 'rgba(0, 200, 0, 0.3)';
-  ctx.lineWidth = 2;
-  ctx.setLineDash([2, 3]);
-  ctx.stroke();
-
-  ctx.setLineDash([]); // Reset dash style
-}
+    //     ctx.beginPath();
+    //     ctx.moveTo(x1, y1);
+    //     ctx.lineTo(x2, y2);
+    //     ctx.strokeStyle = 'rgba(0, 0, 255, 0.5)';
+    //     ctx.lineWidth = 2;
+    //     ctx.setLineDash([4, 2]);
+    //     ctx.stroke();
+    //     ctx.setLineDash([]);
+    //   }
+    // }
 
 
-    if (mousePos) {
-      const nearest = findNearestCreature(mousePos.x, mousePos.y);
-      if (nearest) {
-        ctx.beginPath();
-        ctx.moveTo(mousePos.x, mousePos.y);
-        ctx.lineTo(nearest.x, nearest.y);
-        ctx.strokeStyle = '#ff6633';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-      }
-    }
+
+    // for (const creature of creatures) {
+    //   const { col, row, species, name, hitpoints, damage } = creature;
+    //   const x = offsetX + col * horizSpacing + hexRadius;
+    //   const y = offsetY + row * vertSpacing + (col % 2 === 0 ? 0 : vertSpacing / 2);
+    //   drawCreature(ctx, x, y, species, name, hitpoints, damage);
+    // }
+
+//     // Draw sight and movement range if activeCreature has showRange
+// const activeCreature = creatures[activeIndex ?? -1];
+// if (activeCreature?.showRange) {
+//   const { col, row, sight, movement } = activeCreature;
+//   const centerX = offsetX + col * horizSpacing + hexRadius;
+//   const centerY = offsetY + row * vertSpacing + (col % 2 === 0 ? 0 : vertSpacing / 2);
+
+//   // Sight range (blue)
+//   ctx.beginPath();
+//   ctx.arc(centerX, centerY, sight, 0, 2 * Math.PI);
+//   ctx.strokeStyle = 'rgba(0, 128, 255, 0.4)';
+//   ctx.lineWidth = 2;
+//   ctx.setLineDash([5, 5]);
+//   ctx.stroke();
+
+//   // Movement range (green)
+//   ctx.beginPath();
+//   ctx.arc(centerX, centerY, movement, 0, 2 * Math.PI);
+//   ctx.strokeStyle = 'rgba(0, 200, 0, 0.3)';
+//   ctx.lineWidth = 2;
+//   ctx.setLineDash([2, 3]);
+//   ctx.stroke();
+
+//   ctx.setLineDash([]); // Reset dash style
+// }
+
+
+    // if (mousePos) {
+    //   const nearest = findNearestCreature(mousePos.x, mousePos.y);
+    //   if (nearest) {
+    //     ctx.beginPath();
+    //     ctx.moveTo(mousePos.x, mousePos.y);
+    //     ctx.lineTo(nearest.x, nearest.y);
+    //     ctx.strokeStyle = '#ff6633';
+    //     ctx.lineWidth = 2;
+    //     ctx.stroke();
+    //   }
+    // }
 
     
   }, [params, grid, showLabels, creatures, activeIndex, width, height, mousePos]);

@@ -1,18 +1,21 @@
 import math
 import random
 from collections import defaultdict
-# Dear future: 
-# angle 180 is pointing to the left. 
-# angle 90 is up
-# angle 0 is right
-viewport_width = 1000
-viewport_height = 500
-goal_x = viewport_width // 2
-goal_y = viewport_height // 2
-hex_size = 1000 // 50
-elf_goal = "reach center and occupy as long as possible"
-orc_goal = "kill elves"
+from globals import viewport_width,viewport_height,goal_x,goal_y,hex_size, elf_goal,orc_goal,rows,cols
 
+# # Dear future: 
+# # angle 180 is pointing to the left. 
+# # angle 90 is up
+# # angle 0 is right
+# viewport_width = 1000
+# viewport_height = 500
+# goal_x = viewport_width // 2
+# goal_y = viewport_height // 2
+# hex_size = 1000 // 50
+# elf_goal = "reach center and occupy as long as possible"
+# orc_goal = "kill elves"
+# rows = viewport_height // hex_size
+# cols = viewport_width // hex_size
 seen_names = defaultdict(int)
 
 elf_syllables = [
@@ -203,9 +206,6 @@ def move(creature):
 
 
 if __name__ == '__main__':
-
-
-
     all_creatures = list(elves.values()) + list(orcs.values())
     sorted_by_initiative = sorted(all_creatures, key=lambda c: c.initiative, reverse=True)
 
@@ -237,3 +237,7 @@ if __name__ == '__main__':
     for i in orcs:
         orc = orcs[i]
         print(f"{i}    {orc.race} damage={orc.damage}   x={orc.x}   y={orc.y}  hp={orc.hitpoints} {orc.name}")
+
+
+
+    print(f"rows={rows} cols={cols}")
