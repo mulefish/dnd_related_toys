@@ -1,31 +1,31 @@
-canvas {
-  background-color: #fff;
-}
-
-.hex-container {
-  /* border: 2px solid #444; */
-  margin: 12px;
-  padding: 4px;
-  background-color: #fafafa;
-}
-
-.creature-list {
-  padding: 10px;
+/* src/index.css */
+body {
+  margin: 0;
   font-family: sans-serif;
 }
 
-.creature-card {
-  padding: 8px;
-  margin: 6px 0;
-  border-radius: 6px;
-  line-height: 1.4;
-  font-size: 14px;
+.app-header {
+  height: 50px;
+  background-color: #282c34;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
 }
 
-.orc {
-  background-color: #dddddd;
+.nav-links {
+  display: flex;
+  gap: 20px;
 }
 
-.elf {
-  background-color: #d5f5dc;
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: #61dafb;
 }

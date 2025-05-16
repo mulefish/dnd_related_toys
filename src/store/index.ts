@@ -1,12 +1,9 @@
-// store.ts
 import { configureStore } from '@reduxjs/toolkit';
-import gridReducer from './gridSlice';
-import creatureReducer from './creatureSlice';
+import globalsReducer from './globalsSlice';
 
 export const store = configureStore({
   reducer: {
-    grid: gridReducer,
-    creatures: creatureReducer
+    globals: globalsReducer,
   },
 });
 
