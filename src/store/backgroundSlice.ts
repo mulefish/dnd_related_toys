@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type Cell = {
+  isGoal: any
   cost: number
   row: number
   col: number

@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS # type: ignore
 from python_logic.creatures import roll_dice, load_creatures
-from python_logic.combat import move
+from python_logic.combat import move, remove_dead
 from python_logic.background import create_background
 from python_logic.globals import goals, hex_size
 
@@ -68,14 +68,23 @@ def run_turn():
     try:
         all_creatures = list(elves.values()) + list(orcs.values())
         sorted_creatures = sorted(all_creatures, key=lambda c: c.initiative, reverse=True)
+        print("goals")
+        print( goals)
         for c in sorted_creatures:
+            # def move(creature, elves, orcs, goal_x, goal_y, hex_size, roll_dice):
+
             move(c, elves, orcs, goals, hex_size, roll_dice)
+
+        # elves = remove_dead(elves)
+        # orcs = remove_dead(orcs)
 
         return jsonify({
             "elves": {i: serialize(e) for i, e in elves.items()},
             "orcs": {i: serialize(o) for i, o in orcs.items()}
         })
     except Exception as e:
+        print("IT FAILED!")
+        print(str(e))
         return jsonify({"error": "Failed to run turn", "details": str(e)}), 500
 
 

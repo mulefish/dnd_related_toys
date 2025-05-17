@@ -7,9 +7,19 @@ import { AppDispatch } from '../store';
 
 export function useCommunication() {
   const dispatch = useDispatch<AppDispatch>();
-  const isCallingRef = useRef(false); // shared across re-renders
+
+  const isCallingGlobals = useRef(false);
+  const isCallingBackground = useRef(false);
+  const isCallingStartGame = useRef(false);
+  const isCallingRunTurn = useRef(false);
 
   const fetchGlobals = async () => {
+    if (isCallingGlobals.current) {
+      console.warn('fetchGlobals ignored (already in progress)');
+      return;
+    }
+
+    isCallingGlobals.current = true;
     dispatch(startLoading());
     try {
       const response = await fetch('http://localhost:5000/get-globals');
@@ -20,16 +30,18 @@ export function useCommunication() {
       const message = err?.message || 'Unknown error during fetchGlobals';
       alert(`Error: ${message}`);
       dispatch(setError(message));
+    } finally {
+      isCallingGlobals.current = false;
     }
   };
 
   const createBackground = async (caller: string) => {
-    if (isCallingRef.current) {
-      console.warn(`⚠️ createBackground from ${caller} ignored (already in progress)`);
+    if (isCallingBackground.current) {
+      console.warn(`createBackground from ${caller} ignored (already in progress)`);
       return;
     }
 
-    isCallingRef.current = true; // lock it
+    isCallingBackground.current = true;
     try {
       const response = await fetch('http://localhost:5000/create-background', { method: 'POST' });
       if (!response.ok) throw new Error('Failed to create background');
@@ -39,9 +51,9 @@ export function useCommunication() {
       if (data) {
         dispatch(setBackground(data));
         const goalCells = data.flat().filter((cell: { isGoal: any }) => cell.isGoal);
-        console.log(`✅ createBackground called by: ${caller}, goals: ${goalCells.length}`);
+        console.log(`createBackground called by: ${caller}, goals: ${goalCells.length}`);
       } else {
-        console.log('❌ BOO createBackground ' + data);
+        console.log('createBackground returned empty or unexpected data:', data);
       }
 
       if (data.elves && data.orcs) {
@@ -52,11 +64,17 @@ export function useCommunication() {
       alert(`Error: ${message}`);
       console.error('createBackground error', err);
     } finally {
-      isCallingRef.current = false; // release lock
+      isCallingBackground.current = false;
     }
   };
 
   const startGame = async () => {
+    if (isCallingStartGame.current) {
+      console.warn('startGame ignored (already in progress)');
+      return;
+    }
+
+    isCallingStartGame.current = true;
     try {
       const response = await fetch('http://localhost:5000/start-game', { method: 'POST' });
       if (!response.ok) throw new Error('Failed to start game');
@@ -65,11 +83,19 @@ export function useCommunication() {
     } catch (err: any) {
       const message = err?.message || 'Unknown error during startGame';
       alert(`Error: ${message}`);
-      console.error('Start game error', err);
+      console.error('startGame error', err);
+    } finally {
+      isCallingStartGame.current = false;
     }
   };
 
   const runTurn = async () => {
+    if (isCallingRunTurn.current) {
+      console.warn('runTurn ignored (already in progress)');
+      return;
+    }
+
+    isCallingRunTurn.current = true;
     try {
       const response = await fetch('http://localhost:5000/run-turn', { method: 'POST' });
       if (!response.ok) throw new Error('Failed to run turn');
@@ -78,7 +104,9 @@ export function useCommunication() {
     } catch (err: any) {
       const message = err?.message || 'Unknown error during runTurn';
       alert(`Error: ${message}`);
-      console.error('Run turn error', err);
+      console.error('runTurn error', err);
+    } finally {
+      isCallingRunTurn.current = false;
     }
   };
 

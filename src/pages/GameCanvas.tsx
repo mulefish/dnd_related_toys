@@ -177,16 +177,23 @@ export default function GameCanvas() {
       for (let col = 0; col < cols; col++) {
         const cell = background[row]?.[col];
         if (!cell) continue;
-
+    
         const x = col * horizSpacing + hex_size;
         const y = row * vertSpacing + (col % 2 === 0 ? 0 : vertSpacing / 2);
         const label = `${row},${col}`;
-
-        let fillColor = '#fff'
-
-//         const fillColor = cell.cost === 5 ? '#aaa' : '#fff';
-
+    
+        const fillColor = cell.cost === 5 ? '#aaa' : '#fff';
+    
         drawHex(x, y, hex_size, label, fillColor);
+    
+        if (cell.isGoal) {
+          ctx.beginPath();
+          ctx.globalAlpha = 0.8;
+          ctx.fillStyle = 'blue';
+          ctx.arc(x, y, hex_size * 0.4, 0, 2 * Math.PI);
+          ctx.fill();
+          ctx.globalAlpha = 1.0;
+        }
       }
     }
 
