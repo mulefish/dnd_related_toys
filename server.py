@@ -1,10 +1,9 @@
 from flask import Flask, jsonify
 from flask_cors import CORS # type: ignore
-from python_logic.loader import load_creatures
-from python_logic.creatures import roll_dice
+from python_logic.creatures import roll_dice, load_creatures
 from python_logic.combat import move
-from python_logic.hexgrid import get_hex_grid
-from python_logic.globals import goal_x, goal_y, hex_size
+from python_logic.background import create_background
+from python_logic.globals import goals, hex_size
 
 app = Flask(__name__)
 CORS(app)
@@ -20,11 +19,14 @@ def serialize(c):
         "angle": c.angle
     }
 
+
+
 @app.route("/start-game", methods=["POST"])
 def start_game():
+    print("start_game")
     try:
         global elves, orcs
-        elves, orcs = load_creatures(num_elves=1, num_orcs=3)
+        elves, orcs = load_creatures(num_elves=10, num_orcs=20)
         return jsonify({
             "elves": {i: serialize(e) for i, e in elves.items()},
             "orcs": {i: serialize(o) for i, o in orcs.items()}
@@ -35,13 +37,14 @@ def start_game():
 
 @app.route("/get-globals")
 def get_globals():
+    print("get_globals")
+
     try:
         from python_logic import globals as g
         return jsonify({
             "viewport_width": g.viewport_width,
             "viewport_height": g.viewport_height,
-            "goal_x": g.goal_x,
-            "goal_y": g.goal_y,
+            "goals": g.goals,
             "hex_size": g.hex_size,
             "elf_goal": g.elf_goal,
             "orc_goal": g.orc_goal,
@@ -53,17 +56,20 @@ def get_globals():
     except Exception as e:
         return jsonify({"error": "Failed to load globals", "details": str(e)}), 500
 
-@app.route("/hex-grid")
-def hex_grid():
-    return get_hex_grid()
+@app.route("/create-background", methods=['POST'])
+def create_background_route():
+    print("create_background_route")
+    from python_logic import globals as g
+    return create_background(g.rows,g.cols)
 
 @app.route("/run-turn", methods=["POST"])
 def run_turn():
+    print("run_turn")
     try:
         all_creatures = list(elves.values()) + list(orcs.values())
         sorted_creatures = sorted(all_creatures, key=lambda c: c.initiative, reverse=True)
         for c in sorted_creatures:
-            move(c, elves, orcs, goal_x, goal_y, hex_size, roll_dice)
+            move(c, elves, orcs, goals, hex_size, roll_dice)
 
         return jsonify({
             "elves": {i: serialize(e) for i, e in elves.items()},

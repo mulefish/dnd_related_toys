@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import globalsReducer from './globalsSlice';
+import backgroundReducer from './backgroundSlice'; 
 
 export const store = configureStore({
   reducer: {
     globals: globalsReducer,
+    background: backgroundReducer
   },
 });
 
