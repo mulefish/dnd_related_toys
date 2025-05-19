@@ -8,6 +8,7 @@ interface Creature {
   y: number;
   hp: number;
   angle: number;
+  hitpoints:number
 }
 
 interface GlobalsState {

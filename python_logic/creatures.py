@@ -21,6 +21,7 @@ def roll_dice(num):
     return sum(random.randint(1, 6) for _ in range(num))
 
 class Creature:
+    # a blank object - will be extended by others
     def __init__(self):
         self.name = "tbd"
         self.str = 0
@@ -35,10 +36,20 @@ class Creature:
         self.damage = 0
         self.angle = 180
         self.attack = 0
+        self.score = 0
         self.initiative = 0
         self.x = 0
         self.y = 0
+        self.race = "tbd"
         self.special_features()
+
+    def special_features(self):
+        pass
+
+    def desc(self):
+        str = f"{self.race} {self.hitpoints} {self.damage} {self.name}"
+        print(str)
+
 
 class Elf(Creature):
     def special_features(self):
